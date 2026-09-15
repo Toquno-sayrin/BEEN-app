@@ -1,0 +1,57 @@
+name: Deploy web preview to GitHub Pages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      BASE_PATH: /${{ github.event.repository.name }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Export web build
+        run: CI=1 npx expo export --platform web --output-dir dist
+
+      - name: Rewrite absolute asset paths for the Pages subpath
+        run: |
+          sed -i "s#href=\"/favicon.ico\"#href=\"$BASE_PATH/favicon.ico\"#" dist/index.html
+          sed -i "s#src=\"/_expo/#src=\"$BASE_PATH/_expo/#" dist/index.html
+          find dist/_expo -name "*.js" -exec sed -i \
+            -e "s#\"/_expo/#\"$BASE_PATH/_expo/#g" \
+            -e "s#\"/assets/#\"$BASE_PATH/assets/#g" \
+            {} +
+          touch dist/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
