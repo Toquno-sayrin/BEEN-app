@@ -119,8 +119,8 @@ const styles = StyleSheet.create({
   gridImage: { width: '100%', height: '100%' },
   gridOverlay: { position: 'absolute', left: 0, right: 0, bottom: 0, padding: 11, paddingTop: 30, backgroundColor: 'rgba(30,20,50,0.5)' },
   gridTitle: { color: colors.white, fontWeight: '800', fontFamily: fonts.extrabold, fontSize: 12 },
-  gridDate: { color: '#F0ECFB', fontSize: 9, marginTop: 4 },
-  emptyTile: { width: '48.8%', aspectRatio: 0.8, borderRadius: radius.small, borderWidth: 1, borderStyle: 'dashed', borderColor: '#D8CFEE', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F8F4FD' },
+  gridDate: { color: colors.accentSoft, fontSize: 9, marginTop: 4 },
+  emptyTile: { width: '48.8%', aspectRatio: 0.8, borderRadius: radius.small, borderWidth: 1, borderStyle: 'dashed', borderColor: colors.accentSoft, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.primarySoft },
   emptyPlus: { color: colors.primary, fontSize: 25 },
   emptyText: { color: colors.muted, fontSize: 11, marginTop: 4 },
 });

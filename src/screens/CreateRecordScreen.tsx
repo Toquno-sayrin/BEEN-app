@@ -88,10 +88,10 @@ export function CreateRecordScreen({ images, onCancel, onSave }: Props) {
         <Text style={{ color: colors.ink, marginBottom: 10 }}>코스 테마</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 20 }}>{courseThemes.map(theme => <Pressable accessibilityRole="button" accessibilityState={{ selected: themes.includes(theme) }} key={theme} onPress={() => setThemes(current => current.includes(theme) ? current.filter(item => item !== theme) : [...current, theme])} style={{ padding: 12, borderRadius: 12, backgroundColor: themes.includes(theme) ? colors.accentSoft : colors.white }}><Text>{theme}</Text></Pressable>)}</View>
         <FieldLabel number="01" label="어떤 하루였나요?" hint="한 줄이면 충분해요" />
-        <TextInput value={title} onChangeText={setTitle} placeholder="오늘의 제목" placeholderTextColor="#A7A1C9" style={styles.titleInput} />
+        <TextInput value={title} onChangeText={setTitle} placeholder="오늘의 제목" placeholderTextColor={colors.muted} style={styles.titleInput} />
 
         <FieldLabel number="02" label="기억하고 싶은 말" hint="선택" />
-        <TextInput value={note} onChangeText={setNote} multiline placeholder="짧은 이야기를 남겨보세요" placeholderTextColor="#A7A1C9" style={styles.noteInput} />
+        <TextInput value={note} onChangeText={setNote} multiline placeholder="짧은 이야기를 남겨보세요" placeholderTextColor={colors.muted} style={styles.noteInput} />
 
         <FieldLabel number="03" label="어디를 다녀왔나요?" hint="장소 연결" />
         <Pressable onPress={() => setLocation(location === '장소 미설정' ? '저녁 산책 코스' : '장소 미설정')} style={styles.locationButton}>
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   photo: { width: '100%', height: '100%' },
   coverPill: { position: 'absolute', top: 7, left: 7, borderRadius: 12, paddingHorizontal: 8, paddingVertical: 4, backgroundColor: colors.primary },
   coverText: { color: colors.white, fontSize: 9, fontWeight: '800', fontFamily: fonts.extrabold },
-  addPhoto: { width: 92, height: 148, borderRadius: radius.small, borderWidth: 1, borderStyle: 'dashed', borderColor: '#D9D0EE', alignItems: 'center', justifyContent: 'center' },
+  addPhoto: { width: 92, height: 148, borderRadius: radius.small, borderWidth: 1, borderStyle: 'dashed', borderColor: colors.accentSoft, alignItems: 'center', justifyContent: 'center' },
   addPlus: { color: colors.primary, fontSize: 24 },
   addText: { color: colors.muted, fontSize: 10, marginTop: 5 },
   form: { paddingHorizontal: 20 },
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   visibilityText: { color: colors.muted, fontSize: 10, fontWeight: '700', fontFamily: fonts.bold },
   visibilityTextActive: { color: colors.white },
   saveButton: { marginTop: 30, paddingVertical: 16, borderRadius: radius.medium, backgroundColor: colors.primary, alignItems: 'center' },
-  saveButtonDisabled: { backgroundColor: '#D6CDEE' },
+  saveButtonDisabled: { backgroundColor: colors.primarySoft },
   saveText: { color: colors.white, fontSize: 14, fontWeight: '800', fontFamily: fonts.extrabold },
   saveHint: { color: colors.muted, fontSize: 10, textAlign: 'center', marginTop: 9 },
 });
