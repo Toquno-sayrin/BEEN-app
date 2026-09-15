@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CourseMap } from './CourseMap';
 import { colors } from '../theme';
@@ -35,6 +35,9 @@ export function PlaceExplorer({ record }: { record?: OutingRecord }) {
   const places = useMemo(() => mode === 'search' ? results : mode === 'saved' ? saved.filter(p => !folder || p.folder === folder) : record?.places ?? [], [mode, results, saved, folder, record]);
   const selected = places.find(p => p.id === selectedId) ?? places[0];
   const stored = saved.find(p => p.id === selected?.id);
+  const selectedImage = mode === 'course' && record?.images.length && selected
+    ? record.images[record.places.findIndex(p => p.id === selected.id)] ?? record.images[0]
+    : undefined;
   const mapRecord = useMemo<OutingRecord>(() => ({ id: 'place-explorer', author: '', handle: '', date: '', title: '', note: '', location: '', mood: [], music: [], images: [], visibility: '나만 보기', distance: '', duration: '', places }), [places]);
   const switchMode = (next: typeof mode) => { requestRef.current?.abort(); requestRef.current = null; setBusy(false); setMode(next); setSelectedId(undefined); setError(''); setNotice(''); };
   const search = async () => {
@@ -65,7 +68,16 @@ export function PlaceExplorer({ record }: { record?: OutingRecord }) {
     {!!notice && <Text accessibilityLiveRegion="polite">{notice}</Text>}
     {mode === 'saved' && <ScrollView horizontal contentContainerStyle={s.row}><Pressable style={s.tab} onPress={() => setFolder('')}><Text>전체</Text></Pressable>{[...new Set(saved.map(p => p.folder))].map(value => <Pressable key={value} accessibilityRole="button" accessibilityState={{ selected: folder === value }} style={[s.tab, folder === value && s.active]} onPress={() => setFolder(value)}><Text>{value}</Text></Pressable>)}</ScrollView>}
     <Text style={s.title}>{mode === 'search' ? `‘${searched}’ 검색 결과 · ${places.length}곳` : mode === 'saved' ? '저장한 장소' : '나의 지도'}</Text>
-    <View style={s.map}><CourseMap record={mapRecord} selectedPlaceId={selected?.id} onSelectPlace={setSelectedId} showRoute={mode === 'course'} /></View>
+    <View style={s.map}>
+      <CourseMap record={mapRecord} selectedPlaceId={selected?.id} onSelectPlace={setSelectedId} showRoute={mode === 'course'} />
+      {!!selected && <View style={s.mapOverlay}>
+        <Pressable accessibilityRole="button" accessibilityLabel="정보 닫기" onPress={() => setSelectedId(undefined)} style={s.mapOverlayClose}><Text style={s.mapOverlayCloseText}>×</Text></Pressable>
+        {!!selectedImage && <Image source={selectedImage} accessibilityLabel={`${selected.name} 사진`} style={s.mapOverlayImage} resizeMode="cover" />}
+        <Text numberOfLines={1} style={s.mapOverlayTitle}>{selected.name}</Text>
+        <Text numberOfLines={1} style={s.mapOverlayMeta}>{selected.address}</Text>
+        {!!selected.category && <Text numberOfLines={1} style={s.mapOverlayMeta}>{selected.category}</Text>}
+      </View>}
+    </View>
     {!places.length && !busy && <Text>{mode === 'search' ? '검색 결과가 없어요. 지역과 장소명을 함께 입력해 보세요.' : mode === 'saved' ? '아직 저장된 장소가 없어요.' : '등록된 코스 장소가 없어요.'}</Text>}
     {mode === 'search' && !!places.length && <Text style={s.meta}>네이버 지역 검색 결과 · 최대 5곳</Text>}
     <ScrollView horizontal contentContainerStyle={s.row}>{places.map((place, index) => <Pressable accessibilityRole="button" accessibilityState={{ selected: selected?.id === place.id }} key={place.id} onPress={() => setSelectedId(place.id)} style={[s.tab, selected?.id === place.id && s.active]}><Text>{index + 1} · {place.name}</Text></Pressable>)}</ScrollView>
@@ -84,4 +96,11 @@ function PlaceEditor({ place, disabled, onSave, onDelete }: { place: SavedPlace;
   const [confirm, setConfirm] = useState(false);
   return <View style={s.wrap}><TextInput accessibilityLabel="장소 메모" multiline maxLength={2000} placeholder="메모를 남겨보세요" style={s.input} value={memo} onChangeText={setMemo} /><TextInput accessibilityLabel="장소 분류" maxLength={40} placeholder="분류 이름 (예: 카페, 데이트)" style={s.input} value={folder} onChangeText={setFolder} /><Pressable accessibilityRole="button" disabled={disabled} style={s.button} onPress={() => onSave(memo, folder)}><Text style={s.buttonText}>메모·분류 저장</Text></Pressable><Pressable accessibilityRole="button" disabled={disabled} onPress={() => setConfirm(true)} style={s.tab}><Text>장소 삭제</Text></Pressable>{confirm && <View style={s.row}><Text>삭제할까요?</Text><Pressable accessibilityRole="button" disabled={disabled} onPress={onDelete} style={s.tab}><Text>삭제 확인</Text></Pressable><Pressable onPress={() => setConfirm(false)} style={s.tab}><Text>취소</Text></Pressable></View>}</View>;
 }
-const s = StyleSheet.create({ wrap: { gap: 12 }, row: { flexDirection: 'row', gap: 8, alignItems: 'center' }, input: { minWidth: 0, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.white, color: colors.ink, padding: 12, borderRadius: 12 }, button: { padding: 12, borderRadius: 12, backgroundColor: colors.primary, minHeight: 44, justifyContent: 'center' }, buttonText: { color: colors.white }, tab: { padding: 12, borderRadius: 12, backgroundColor: colors.white, minHeight: 44 }, active: { backgroundColor: colors.accentSoft }, title: { fontSize: 18, fontWeight: '600', color: colors.ink }, map: { height: 310, borderRadius: 18, overflow: 'hidden', backgroundColor: colors.primarySoft }, panel: { padding: 16, backgroundColor: colors.white, borderRadius: 14, gap: 10 }, meta: { fontSize: 12, color: colors.muted } });
+const s = StyleSheet.create({ wrap: { gap: 12 }, row: { flexDirection: 'row', gap: 8, alignItems: 'center' }, input: { minWidth: 0, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.white, color: colors.ink, padding: 12, borderRadius: 12 }, button: { padding: 12, borderRadius: 12, backgroundColor: colors.primary, minHeight: 44, justifyContent: 'center' }, buttonText: { color: colors.white }, tab: { padding: 12, borderRadius: 12, backgroundColor: colors.white, minHeight: 44 }, active: { backgroundColor: colors.accentSoft }, title: { fontSize: 18, fontWeight: '600', color: colors.ink }, map: { height: 310, borderRadius: 18, overflow: 'hidden', backgroundColor: colors.primarySoft }, panel: { padding: 16, backgroundColor: colors.white, borderRadius: 14, gap: 10 }, meta: { fontSize: 12, color: colors.muted },
+  mapOverlay: { position: 'absolute', top: 12, right: 12, maxWidth: 220, backgroundColor: colors.white, borderRadius: 14, padding: 10, gap: 4, shadowColor: '#000', shadowOpacity: 0.12, shadowRadius: 10, shadowOffset: { width: 0, height: 4 }, elevation: 4, zIndex: 5 },
+  mapOverlayClose: { position: 'absolute', top: 6, right: 6, width: 22, height: 22, borderRadius: 11, backgroundColor: colors.primarySoft, alignItems: 'center', justifyContent: 'center', zIndex: 1 },
+  mapOverlayCloseText: { color: colors.ink, fontSize: 14, lineHeight: 16 },
+  mapOverlayImage: { width: '100%', height: 100, borderRadius: 10, marginBottom: 6, backgroundColor: colors.primarySoft },
+  mapOverlayTitle: { color: colors.ink, fontSize: 13, fontWeight: '700', paddingRight: 20 },
+  mapOverlayMeta: { color: colors.muted, fontSize: 11, marginTop: 2 },
+});

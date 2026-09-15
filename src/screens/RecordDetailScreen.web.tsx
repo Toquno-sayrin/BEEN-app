@@ -48,6 +48,7 @@ export function RecordDetailScreen({ record, onBack, onOpenMap }: Props) {
             <div className="bd-panel-heading"><span className="bd-eyebrow">SELECTED PLACE</span><span className="bd-counter">{selected ? String(selectedIndex + 1).padStart(2, '0') : '00'} / {String(record.places.length).padStart(2, '0')}</span></div>
             {selected ? <>
               <div className="bd-selected-number">{String(selectedIndex + 1).padStart(2, '0')}<span>코스의 {selectedIndex + 1}번째 장소</span></div>
+              {!!record.images.length && <Image source={record.images[selectedIndex] ?? record.images[0]} accessibilityLabel={`${selected.name} 사진`} style={{ width: '100%', height: 160, borderRadius: 8, marginTop: 8 }} resizeMode="cover" />}
               <h2>{selected.name}</h2><p className="bd-address">{selected.address}</p><p className="bd-address">{selected.category || '미분류'}</p><button className="bd-text-button" onClick={() => { void openNaverMap(selected.name, selected).catch(() => setMessage('지도를 열지 못했어요. 다시 시도해 주세요.')); }}>네이버 지도에서 열기 ↗</button>
               <div className="bd-place-meta"><span>머문 시간</span><strong>{selected.stay}</strong></div>
               <div className="bd-memo"><span className="bd-eyebrow">PLACE NOTE</span><p>{selected.memo || '남겨진 메모가 없습니다.'}</p></div>
