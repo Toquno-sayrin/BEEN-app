@@ -4,7 +4,7 @@ import { MapFallback } from './MapFallback';
 import { mapDocument, naverBaseUrl, naverClientId, scriptJson, type CourseMapProps } from './naverMapDocument';
 export function CourseMap(props: CourseMapProps) {
   const webview = useRef<WebView>(null);
-  const html = useMemo(() => mapDocument(props.record, naverClientId), [props.record]);
+  const html = useMemo(() => mapDocument(props.record, naverClientId, props.showRoute ?? true), [props.record, props.showRoute]);
   const selection = `window.selectPlace && window.selectPlace(${scriptJson(props.selectedPlaceId ?? '')});true;`;
   useEffect(() => { webview.current?.injectJavaScript(selection); }, [selection]);
   if (!naverClientId || !/^https?:\/\//.test(naverBaseUrl)) return <MapFallback {...props} />;
