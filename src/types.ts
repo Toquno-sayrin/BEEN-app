@@ -24,9 +24,7 @@ export type OutingRecord = {
   note: string;
   location: string;
   themes?: string[];
-  mood: string[];
   images: ImageSourcePropType[];
-  music: string[];
   visibility: Visibility;
   distance: string;
   duration: string;

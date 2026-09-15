@@ -29,21 +29,6 @@ export function ProfileScreen({ records, onOpenRecord, onOpenMap }: Props) {
         <Stat value="4" label="저장한 사람" />
       </View>
 
-      <View style={styles.sectionHeading}>
-        <Text style={styles.sectionTitle}>기억 모음</Text>
-        <Text style={styles.sectionHint}>분위기로 다시 보기</Text>
-      </View>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.highlights}>
-        {['저녁 산책', '노을', '공원', '음악'].map((label, index) => (
-          <View key={label} style={styles.highlightItem}>
-            <View style={[styles.highlightCircle, index === 0 && styles.highlightActive]}>
-              <Text style={styles.highlightEmoji}>{['🌿', '🌇', '🪴', '♫'][index]}</Text>
-            </View>
-            <Text style={styles.highlightLabel}>{label}</Text>
-          </View>
-        ))}
-      </ScrollView>
-
       <Pressable onPress={onOpenMap} style={styles.mapSummary}>
         <View>
           <Text style={styles.mapEyebrow}>MY BEEN MAP</Text>
@@ -102,12 +87,6 @@ const styles = StyleSheet.create({
   sectionHeading: { marginTop: 24, marginBottom: 12, paddingHorizontal: 20, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' },
   sectionTitle: { color: colors.ink, fontWeight: '800', fontFamily: fonts.extrabold, fontSize: 17 },
   sectionHint: { color: colors.muted, fontSize: 11 },
-  highlights: { paddingHorizontal: 20, gap: 15 },
-  highlightItem: { alignItems: 'center', gap: 7 },
-  highlightCircle: { width: 58, height: 58, borderRadius: 29, backgroundColor: colors.primarySoft, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: colors.paper },
-  highlightActive: { borderColor: colors.accent },
-  highlightEmoji: { fontSize: 22 },
-  highlightLabel: { color: colors.muted, fontSize: 10 },
   mapSummary: { marginHorizontal: 20, marginTop: 24, padding: 18, borderRadius: radius.medium, backgroundColor: colors.primary, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   mapEyebrow: { color: colors.primarySoft, fontSize: 10, fontWeight: '800', fontFamily: fonts.extrabold, letterSpacing: 1.2 },
   mapTitle: { color: colors.white, fontWeight: '800', fontFamily: fonts.extrabold, fontSize: 15, marginTop: 5 },

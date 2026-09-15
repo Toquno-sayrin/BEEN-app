@@ -9,12 +9,10 @@ export const sampleRecord: OutingRecord = {
   note: '선선해진 저녁, 음악을 들으며 오래 걸었다.',
   location: '서울 성동구 · 샘플 코스',
   themes: ['산책', '데이트'],
-  mood: ['여유', '노을', '공원'],
   images: [
     require('../../assets/outing-bridge.jpg'),
     require('../../assets/outing-park.jpg'),
   ],
-  music: ['Inside My Love · RIIZE', 'My Friend · MARK'],
   visibility: '나만 보기',
   distance: '3.2 km',
   duration: '1시간 20분',

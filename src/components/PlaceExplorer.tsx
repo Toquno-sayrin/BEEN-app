@@ -40,7 +40,7 @@ export function PlaceExplorer({ record }: { record?: OutingRecord }) {
   const overlayImage = mode === 'course' && record?.images.length && overlayPlace
     ? record.images[record.places.findIndex(p => p.id === overlayPlace.id)] ?? record.images[0]
     : undefined;
-  const mapRecord = useMemo<OutingRecord>(() => ({ id: 'place-explorer', author: '', handle: '', date: '', title: '', note: '', location: '', mood: [], music: [], images: [], visibility: '나만 보기', distance: '', duration: '', places }), [places]);
+  const mapRecord = useMemo<OutingRecord>(() => ({ id: 'place-explorer', author: '', handle: '', date: '', title: '', note: '', location: '', images: [], visibility: '나만 보기', distance: '', duration: '', places }), [places]);
   const pickPlace = (id: string) => { setSelectedId(id); setOverlayId(id); };
   const switchMode = (next: typeof mode) => { requestRef.current?.abort(); requestRef.current = null; setBusy(false); setMode(next); setSelectedId(undefined); setOverlayId(undefined); setError(''); setNotice(''); };
   const search = async () => {

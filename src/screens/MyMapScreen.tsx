@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Brand } from '../components/Brand';
 import { PlaceExplorer } from '../components/PlaceExplorer';
-import { openNaverMap } from '../naverMaps';
 import { colors, fonts } from '../theme';
 import type { OutingRecord } from '../types';
 
@@ -21,18 +20,15 @@ export function MyMapScreen({ records, onOpenRecord, onCreate }: Props) {
       {records.map(item => <View key={item.id} style={styles.panel}>
         <Text style={styles.meta}>{item.date} · {item.visibility}</Text><Text style={styles.title}>{item.title}</Text>
         <Text style={styles.note}>{section === '글' ? item.note || '아직 작성한 글이 없어요.' : `${item.places.length}곳 · ${item.duration} · ${item.distance}`}</Text>
-        <View style={styles.actions}><Pressable accessibilityRole="button" onPress={() => { setRecordId(item.id);  }} style={styles.link}><Text style={styles.linkText}>지도에 표시</Text></Pressable><Pressable accessibilityRole="button" onPress={() => onOpenRecord(item)} style={styles.link}><Text style={styles.linkText}>상세 보기 ↗</Text></Pressable></View>
+        <View style={styles.actions}><Pressable accessibilityRole="button" onPress={() => setRecordId(item.id)} style={styles.link}><Text style={styles.linkText}>지도에 표시</Text></Pressable><Pressable accessibilityRole="button" onPress={() => onOpenRecord(item)} style={styles.link}><Text style={styles.linkText}>상세 보기 ↗</Text></Pressable></View>
       </View>)}
     </View>
   </ScrollView>;
 }
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.paper }, content: { paddingBottom: 32 }, body: { paddingHorizontal: 20, gap: 12 },
-  searchRow: { flexDirection: 'row', gap: 8 }, input: { flex: 1, minWidth: 0, backgroundColor: colors.white, borderWidth: 1, borderColor: colors.line, borderRadius: 12, padding: 12, color: colors.ink, fontSize: 13 },
-  button: { backgroundColor: colors.primary, padding: 12, borderRadius: 12, justifyContent: 'center' }, buttonText: { color: colors.white, fontSize: 12 },
   heading: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 12 }, headingText: { fontSize: 20, color: colors.ink, fontFamily: fonts.bold },
-  map: { height: 310, borderRadius: 18, overflow: 'hidden', backgroundColor: colors.primarySoft }, empty: { flex: 1, justifyContent: 'center', alignItems: 'center', gap: 10 },
   panel: { backgroundColor: colors.white, padding: 16, borderRadius: 14, borderWidth: 1, borderColor: colors.line, gap: 7 }, title: { color: colors.ink, fontSize: 14, fontFamily: fonts.semibold },
   meta: { color: colors.muted, fontSize: 12, lineHeight: 19 }, note: { color: colors.ink, fontSize: 13, lineHeight: 22 }, chips: { flexDirection: 'row', gap: 8 }, chip: { padding: 12, borderRadius: 12, backgroundColor: colors.white }, selected: { backgroundColor: colors.accentSoft },
-  link: { minHeight: 44, justifyContent: 'center' }, linkText: { color: colors.primary, fontSize: 13, fontFamily: fonts.semibold }, result: { paddingVertical: 10, gap: 5 }, actions: { flexDirection: 'row', justifyContent: 'space-between' },
+  link: { minHeight: 44, justifyContent: 'center' }, linkText: { color: colors.primary, fontSize: 13, fontFamily: fonts.semibold }, actions: { flexDirection: 'row', justifyContent: 'space-between' },
 });
