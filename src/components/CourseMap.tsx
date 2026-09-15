@@ -54,7 +54,7 @@ export function CourseMap(props: CourseMapProps) {
       if (places.length > 1) { map.fitBounds(bounds); if (props.showRoute !== false) new api.Polyline({ map, path: places.map(p => new api.LatLng(p.latitude, p.longitude)), strokeColor: '#F2789F', strokeOpacity: .7, strokeWeight: 4 }); }
       updateSelection.current = () => markers.forEach((marker, i) => marker.setIcon(icon(places[i].index, places[i].id === activeProps.current.selectedPlaceId)));
     }).catch(error => { console.error('NAVER map initialization failed', error); if (!disposed) setError(error?.message || '지도를 불러오지 못했어요.'); });
-    return () => { disposed = true; updateSelection.current = () => {}; markers.forEach(marker => { sdk.Event.clearInstanceListeners(marker); marker.setMap(null); }); map?.destroy(); };
+    return () => { disposed = true; updateSelection.current = () => {}; try { markers.forEach(marker => { sdk.Event.clearInstanceListeners(marker); marker.setMap(null); }); map?.destroy(); } catch { /* The SDK clears its globals after authentication failure. Keep the surrounding app usable. */ } };
   }, [props.record, props.showRoute]);
   useEffect(() => updateSelection.current(), [props.selectedPlaceId]);
   if (!naverClientId) return <MapFallback {...props} />;

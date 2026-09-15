@@ -20,7 +20,7 @@ async function type(label,value){const element=await request('/session/'+session
 async function check(script,message){if(!(await execute(script)))throw Error(message);}
 (async()=>{
  await new Promise(r=>server.listen(4178,'127.0.0.1',r));
- session=(await request('/session',{capabilities:{alwaysMatch:{browserName:'chrome','goog:chromeOptions':{args:['--headless=new','--disable-gpu']}}}})).sessionId;
+ session=(await request('/session',{capabilities:{alwaysMatch:{browserName:'chrome','goog:loggingPrefs':{browser:'ALL'},'goog:chromeOptions':{args:['--headless=new','--disable-gpu']}}}})).sessionId;
  await request('/session/'+session+'/url',{url:process.env.TEST_URL || 'http://127.0.0.1:4178'});
  for(let i=0;i<80;i++){if(await execute('return !!document.querySelector("input")'))break;await new Promise(r=>setTimeout(r,200));}
  if(!process.env.TEST_URL)await execute('const originalFetch=window.fetch;window.fetch=(url,options)=>String(url).includes("workers.dev/search")?Promise.resolve(new Response(JSON.stringify({places:[{id:"test-cafe",name:"테스트 카페",address:"서울 성동구",category:"카페",latitude:37.54,longitude:127.04,memo:"",stay:""}]}),{status:200})):originalFetch(url,options);');
@@ -35,4 +35,4 @@ async function check(script,message){if(!(await execute(script)))throw Error(mes
  fs.writeFileSync('artifacts/saved-places.png',Buffer.from(await request('/session/'+session+'/screenshot',null,'GET'),'base64'));
  await clickText('장소 삭제');await clickText('삭제 확인');await check('return document.body.textContent.includes("아직 저장된 장소가 없어요")','Delete failed');
  console.log('PASS: in-app search, save, memo/folder edit, reload persistence, deletion, empty library');
-})().catch(e=>{console.error(e);process.exitCode=1}).finally(async()=>{if(session)await request('/session/'+session,null,'DELETE').catch(()=>{});driver.kill();server.close();});
+})().catch(async e=>{console.error(e);console.log(await execute('return document.body.textContent'));console.log(await request('/session/'+session+'/log',{type:'browser'}));process.exitCode=1}).finally(async()=>{if(session)await request('/session/'+session,null,'DELETE').catch(()=>{});driver.kill();server.close();});
