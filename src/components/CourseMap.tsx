@@ -12,11 +12,13 @@ function loadSdk() {
     const script = document.createElement('script');
     const timeout = window.setTimeout(() => reject(new Error('지도 응답 시간 초과')), 15000);
     sdkWindow.navermap_authFailure = () => { clearTimeout(timeout); reject(new Error('지도 인증 실패')); };
-    script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${encodeURIComponent(naverClientId)}&callback=__beenMapReady`;
+    script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${encodeURIComponent(naverClientId)}`;
     const globals = window as unknown as Record<string, unknown>;
-    globals.__beenMapReady = () => { clearTimeout(timeout); resolve(sdkWindow.naver?.maps); };
+    globals.__beenMapReady = () => {
+      if (typeof sdkWindow.naver?.maps?.Map === 'function') { clearTimeout(timeout); resolve(sdkWindow.naver.maps); }
+    };
     script.onload = () => {
-      if (sdkWindow.naver?.maps) { clearTimeout(timeout); resolve(sdkWindow.naver.maps); }
+      if (typeof sdkWindow.naver?.maps?.Map === 'function') { clearTimeout(timeout); resolve(sdkWindow.naver.maps); }
     };
     script.onerror = () => { clearTimeout(timeout); reject(new Error('지도 연결 실패')); };
     document.head.appendChild(script);
@@ -51,7 +53,7 @@ export function CourseMap(props: CourseMapProps) {
       });
       if (places.length > 1) { map.fitBounds(bounds); new api.Polyline({ map, path: places.map(p => new api.LatLng(p.latitude, p.longitude)), strokeColor: '#2AA484', strokeOpacity: .8, strokeWeight: 4 }); }
       updateSelection.current = () => markers.forEach((marker, i) => marker.setIcon(icon(places[i].index, places[i].id === activeProps.current.selectedPlaceId)));
-    }).catch(() => { if (!disposed) setError(true); });
+    }).catch(error => { console.error('NAVER map initialization failed', error); if (!disposed) setError(true); });
     return () => { disposed = true; updateSelection.current = () => {}; markers.forEach(marker => { sdk.Event.clearInstanceListeners(marker); marker.setMap(null); }); map?.destroy(); };
   }, [props.record]);
   useEffect(() => updateSelection.current(), [props.selectedPlaceId]);
