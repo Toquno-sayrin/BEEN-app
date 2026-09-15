@@ -77,8 +77,7 @@ export function PlaceExplorer({ record }: { record?: OutingRecord }) {
         <Pressable accessibilityRole="button" accessibilityLabel="정보 닫기" onPress={() => setOverlayId(undefined)} style={s.mapOverlayClose}><Text style={s.mapOverlayCloseText}>×</Text></Pressable>
         {!!overlayImage && <Image source={overlayImage} accessibilityLabel={`${overlayPlace.name} 사진`} style={s.mapOverlayImage} resizeMode="cover" />}
         <Text numberOfLines={1} style={s.mapOverlayTitle}>{overlayPlace.name}</Text>
-        <Text numberOfLines={1} style={s.mapOverlayMeta}>{overlayPlace.address}</Text>
-        {!!overlayPlace.category && <Text numberOfLines={1} style={s.mapOverlayMeta}>{overlayPlace.category}</Text>}
+        <Text numberOfLines={1} style={s.mapOverlayMeta}>{overlayPlace.category || overlayPlace.address}</Text>
       </View>}
     </View>
     {!places.length && !busy && <Text>{mode === 'search' ? '검색 결과가 없어요. 지역과 장소명을 함께 입력해 보세요.' : mode === 'saved' ? '아직 저장된 장소가 없어요.' : '등록된 코스 장소가 없어요.'}</Text>}

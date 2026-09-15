@@ -20,7 +20,7 @@ export function MyMapScreen({ records, onOpenRecord, onCreate }: Props) {
       {records.map(item => <View key={item.id} style={styles.panel}>
         <Text style={styles.meta}>{item.date} · {item.visibility}</Text><Text style={styles.title}>{item.title}</Text>
         <Text style={styles.note}>{section === '글' ? item.note || '아직 작성한 글이 없어요.' : `${item.places.length}곳 · ${item.duration} · ${item.distance}`}</Text>
-        <View style={styles.actions}><Pressable accessibilityRole="button" onPress={() => setRecordId(item.id)} style={styles.link}><Text style={styles.linkText}>지도에 표시</Text></Pressable><Pressable accessibilityRole="button" onPress={() => onOpenRecord(item)} style={styles.link}><Text style={styles.linkText}>상세 보기 ↗</Text></Pressable></View>
+        <View style={styles.actions}><Pressable accessibilityRole="button" disabled={recordId === item.id} onPress={() => setRecordId(item.id)} style={[styles.link, recordId === item.id && { opacity: .4 }]}><Text style={styles.linkText}>{recordId === item.id ? '위 지도에 표시 중' : '이 코스를 지도에서 보기'}</Text></Pressable><Pressable accessibilityRole="button" onPress={() => onOpenRecord(item)} style={styles.link}><Text style={styles.linkText}>상세 보기 ↗</Text></Pressable></View>
       </View>)}
     </View>
   </ScrollView>;

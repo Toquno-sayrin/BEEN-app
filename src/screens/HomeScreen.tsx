@@ -40,7 +40,6 @@ export function HomeScreen({ records, onOpenRecord }: Props) {
             <Text style={styles.title}>{record.title}</Text>
             <Text style={styles.note}>{record.note}</Text>
             <View style={styles.actions}>
-              <Pressable onPress={() => onOpenRecord(record)} style={styles.detail}><Text style={styles.detailText}>자세히 보기</Text></Pressable>
               <Pressable onPress={() => onOpenRecord(record)} style={styles.save}><Text style={styles.saveText}>코스와 장소 살펴보기 ↗</Text></Pressable>
             </View>
           </View>
@@ -73,8 +72,6 @@ const styles = StyleSheet.create({
   title: { color: colors.ink, fontSize: 18, fontWeight: '800', fontFamily: fonts.extrabold, marginTop: 7 },
   note: { color: colors.muted, fontSize: 12, lineHeight: 18, marginTop: 7 },
   actions: { flexDirection: 'row', gap: 8, marginTop: 15 },
-  detail: { paddingHorizontal: 13, paddingVertical: 11, borderRadius: 18, borderWidth: 1, borderColor: colors.line },
-  detailText: { color: colors.ink, fontSize: 10, fontWeight: '800', fontFamily: fonts.extrabold },
   save: { flex: 1, paddingHorizontal: 13, paddingVertical: 11, borderRadius: 18, backgroundColor: colors.primary, alignItems: 'center' },
   saveText: { color: colors.white, fontSize: 10, fontWeight: '800', fontFamily: fonts.extrabold },
 });
