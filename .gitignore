@@ -13,6 +13,9 @@ expo-env.d.ts
 # generated screenshots / verification output
 artifacts/
 
+# local oh-my-claudecode session/memory state
+.omc/
+
 # Native
 .kotlin/
 *.orig.*
