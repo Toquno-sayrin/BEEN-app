@@ -15,6 +15,9 @@ function loadSdk() {
     script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${encodeURIComponent(naverClientId)}&callback=__beenMapReady`;
     const globals = window as unknown as Record<string, unknown>;
     globals.__beenMapReady = () => { clearTimeout(timeout); resolve(sdkWindow.naver?.maps); };
+    script.onload = () => {
+      if (sdkWindow.naver?.maps) { clearTimeout(timeout); resolve(sdkWindow.naver.maps); }
+    };
     script.onerror = () => { clearTimeout(timeout); reject(new Error('지도 연결 실패')); };
     document.head.appendChild(script);
   });
