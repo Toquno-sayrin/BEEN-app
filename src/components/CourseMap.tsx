@@ -29,14 +29,14 @@ export function CourseMap(props: CourseMapProps) {
   const container = useRef<HTMLDivElement>(null);
   const activeProps = useRef(props); activeProps.current = props;
   const updateSelection = useRef<() => void>(() => {});
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
   useEffect(() => {
     if (!naverClientId || !container.current) return;
     let disposed = false;
     let map: MapSdk;
     let sdk: MapSdk;
     const markers: MapSdk[] = [];
-    setError(false);
+    setError('');
     loadSdk().then(api => {
       if (disposed) return;
       if (!api) throw Error('지도 초기화 실패');
@@ -53,10 +53,10 @@ export function CourseMap(props: CourseMapProps) {
       });
       if (places.length > 1) { map.fitBounds(bounds); new api.Polyline({ map, path: places.map(p => new api.LatLng(p.latitude, p.longitude)), strokeColor: '#2AA484', strokeOpacity: .8, strokeWeight: 4 }); }
       updateSelection.current = () => markers.forEach((marker, i) => marker.setIcon(icon(places[i].index, places[i].id === activeProps.current.selectedPlaceId)));
-    }).catch(error => { console.error('NAVER map initialization failed', error); if (!disposed) setError(true); });
+    }).catch(error => { console.error('NAVER map initialization failed', error); if (!disposed) setError(error?.message || '지도를 불러오지 못했어요.'); });
     return () => { disposed = true; updateSelection.current = () => {}; markers.forEach(marker => { sdk.Event.clearInstanceListeners(marker); marker.setMap(null); }); map?.destroy(); };
   }, [props.record]);
   useEffect(() => updateSelection.current(), [props.selectedPlaceId]);
   if (!naverClientId) return <MapFallback {...props} />;
-  return <div style={{ flex: 1, minHeight: 300, position: 'relative', width: '100%', height: '100%' }}><div ref={container} aria-label="네이버 코스 지도" style={{ position: 'absolute', inset: 0 }} />{error && <div role="alert" style={{ position: 'absolute', inset: 16, background: '#E4F3EB', padding: 20 }}>지도를 불러오지 못했어요. 네이버 지도에서 열기를 이용해 주세요.</div>}</div>;
+  return <div style={{ flex: 1, minHeight: 300, position: 'relative', width: '100%', height: '100%' }}><div ref={container} aria-label="네이버 코스 지도" style={{ position: 'absolute', inset: 0 }} />{error && <div role="alert" style={{ position: 'absolute', inset: 16, background: '#E4F3EB', padding: 20 }}>지도를 불러오지 못했어요 ({error}). 네이버 지도에서 열기를 이용해 주세요.</div>}</div>;
 }
