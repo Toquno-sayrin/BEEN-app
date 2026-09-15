@@ -1,15 +1,17 @@
 {
   "expo": {
-    "name": "BEEN",
+    "name": "BeENoN",
     "slug": "been-app",
     "version": "0.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
+      "bundleIdentifier": "com.beenin.app",
       "supportsTablet": true
     },
     "android": {
+      "package": "com.beenin.app",
       "adaptiveIcon": {
         "backgroundColor": "#FBFBF7",
         "foregroundImage": "./assets/android-icon-foreground.png",

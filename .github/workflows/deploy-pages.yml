@@ -19,12 +19,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BASE_PATH: /${{ github.event.repository.name }}
+      EXPO_PUBLIC_NAVER_MAP_CLIENT_ID: h3qj929ypu
+      EXPO_PUBLIC_NAVER_MAP_BASE_URL: https://toquno-sayrin.github.io
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - run: npm ci

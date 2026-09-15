@@ -1,0 +1,7 @@
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { colors } from '../theme';
+import type { CourseMapProps } from './naverMapDocument';
+export function MapFallback({ record, selectedPlaceId, onSelectPlace }: CourseMapProps) {
+  return <View style={styles.wrap}><Text style={styles.title}>나의 코스 장소</Text><Text style={styles.caption}>지도 연결을 준비하고 있어요.</Text><View style={styles.places}>{record.places.map((place, index) => <Pressable key={place.id} accessibilityRole="button" accessibilityState={{ selected: selectedPlaceId === place.id }} onPress={() => onSelectPlace?.(place.id)} style={styles.place}><View style={[styles.marker, selectedPlaceId === place.id && styles.selected]}><Text style={styles.number}>{index + 1}</Text></View><Text style={styles.name}>{place.name}</Text></Pressable>)}</View>{!record.places.length && <Text style={styles.caption}>아직 등록한 장소가 없어요.</Text>}</View>;
+}
+const styles = StyleSheet.create({ wrap: { flex: 1, padding: 20, justifyContent: 'center', backgroundColor: colors.primarySoft, gap: 12 }, title: { color: colors.ink, fontSize: 18 }, caption: { color: colors.muted, fontSize: 12 }, places: { flexDirection: 'row', flexWrap: 'wrap', gap: 14 }, place: { alignItems: 'center', gap: 8, maxWidth: 110 }, marker: { width: 38, height: 38, borderRadius: 19, backgroundColor: colors.info, justifyContent: 'center', alignItems: 'center' }, selected: { backgroundColor: colors.primary }, number: { color: colors.white, fontWeight: '700' }, name: { color: colors.ink, fontSize: 12 } });

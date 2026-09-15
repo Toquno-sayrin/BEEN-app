@@ -14,7 +14,7 @@ import { BottomNav } from './src/components/BottomNav';
 import { discoveryRecords, sampleRecord } from './src/data/sampleRecords';
 import { CreateRecordScreen } from './src/screens/CreateRecordScreen';
 import { HomeScreen } from './src/screens/HomeScreen';
-import { MapScreen } from './src/screens/MapScreen';
+import { MyMapScreen } from './src/screens/MyMapScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
 import { RecordDetailScreen } from './src/screens/RecordDetailScreen';
 import { SettingsScreen } from './src/screens/SettingsScreen';
@@ -36,15 +36,12 @@ export default function App() {
     NotoSansKR_900Black,
   });
   const [records, setRecords] = useState<OutingRecord[]>([sampleRecord]);
-  const [view, setView] = useState<ViewState>(Platform.OS === 'web'
-    ? { kind: 'detail', record: sampleRecord, returnTab: 'profile' }
-    : { kind: 'tab', tab: 'profile' });
+  const [view, setView] = useState<ViewState>({ kind: 'tab', tab: 'map' });
   const sampleImages = useMemo(() => sampleRecord.images, []);
 
   if (!fontsLoaded) return null;
 
   const activeTab = view.kind === 'tab' ? view.tab : view.returnTab;
-  const latestRecord = records[0] ?? sampleRecord;
 
   const changeTab = (tab: TabKey) => setView({ kind: 'tab', tab });
   const openRecord = (record: OutingRecord, returnTab: TabKey = activeTab) =>
@@ -62,7 +59,7 @@ export default function App() {
       case 'home':
         return <HomeScreen records={discoveryRecords} onOpenRecord={(record) => openRecord(record, 'home')} />;
       case 'map':
-        return <MapScreen record={latestRecord} onOpenRecord={() => openRecord(latestRecord, 'map')} />;
+        return <MyMapScreen records={records} onOpenRecord={(record) => openRecord(record, 'map')} onCreate={() => changeTab('create')} />;
       case 'create':
         return <CreateRecordScreen images={sampleImages} onCancel={() => changeTab('profile')} onSave={saveRecord} />;
       case 'settings':

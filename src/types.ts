@@ -8,6 +8,7 @@ export type OutingPlace = {
   id: string;
   name: string;
   address: string;
+  category?: string;
   latitude: number;
   longitude: number;
   stay: string;
@@ -22,6 +23,7 @@ export type OutingRecord = {
   title: string;
   note: string;
   location: string;
+  themes?: string[];
   mood: string[];
   images: ImageSourcePropType[];
   music: string[];

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { openNaverMap } from '../naverMaps';
+import { shareCourse } from '../shareCourse';
 import { CourseMap } from '../components/CourseMap';
 import { fonts } from '../theme';
 import type { OutingRecord } from '../types';
@@ -10,7 +12,7 @@ type Props = {
   onOpenMap: () => void;
 };
 
-const colors = { paper: '#FFFFFF', white: '#FFFFFF', ink: '#171717', muted: '#61616B', line: '#E5E5EA', primary: '#7950C7', primarySoft: '#F7F7F8', accent: '#C72566' };
+const colors = { paper: '#FFFFFF', white: '#FFFFFF', ink: '#171717', muted: '#61616B', line: '#E5E5EA', primary: '#389C83', primarySoft: '#F1F7F3', accent: 'rgba(30,125,95,0.8)' };
 const radius = { small: 8, medium: 12, large: 12 };
 
 export function RecordDetailScreen({ record, onBack, onOpenMap }: Props) {
@@ -26,7 +28,7 @@ export function RecordDetailScreen({ record, onBack, onOpenMap }: Props) {
         <Pressable accessibilityRole="button" accessibilityLabel="내 기록으로 돌아가기" onPress={onBack} style={styles.roundButton}><Text style={styles.back}>‹</Text></Pressable>
         <View style={styles.topCopy}>
           <Text style={styles.topEyebrow}>{isOwnRecord ? 'MY BEEN' : record.author.toUpperCase()}</Text>
-          <Text style={styles.topTitle}>BEEN · 코스 상세</Text>
+          <Text style={styles.topTitle}>BeENoN · 코스 상세</Text>
         </View>
       </View>
 
@@ -47,9 +49,10 @@ export function RecordDetailScreen({ record, onBack, onOpenMap }: Props) {
             <Text style={styles.sectionEyebrow}>선택한 장소 · {selectedPlace ? selectedIndex + 1 : 0} / {record.places.length}</Text>
             {selectedPlace ? <>
               <Text style={styles.selectedName}>{selectedPlace.name}</Text>
-              <Text style={styles.address}>{selectedPlace.address}</Text>
+              <Text style={styles.address}>{selectedPlace.address}</Text><Text style={styles.address}>{selectedPlace.category || '미분류'}</Text>
               <Text style={styles.stay}>{selectedPlace.stay} 머묾</Text>
               <Text style={styles.note}>{selectedPlace.memo || '남겨진 메모가 없습니다.'}</Text>
+              <Pressable accessibilityRole="button" style={styles.fullMapButton} onPress={() => { void openNaverMap(selectedPlace.name, selectedPlace).catch(() => Alert.alert('지도 열기', '지도를 열지 못했어요. 다시 시도해 주세요.')); }}><Text style={styles.fullMapText}>네이버 지도에서 열기 ↗</Text></Pressable>
               <View style={styles.pagination}>
                 <Pressable accessibilityRole="button" disabled={selectedIndex <= 0} onPress={() => setSelectedPlaceId(record.places[selectedIndex - 1].id)} style={[styles.fullMapButton, selectedIndex <= 0 && { opacity: .4 }]}><Text style={styles.fullMapText}>← 이전 장소</Text></Pressable>
                 <Pressable accessibilityRole="button" disabled={selectedIndex >= record.places.length - 1} onPress={() => setSelectedPlaceId(record.places[selectedIndex + 1].id)} style={[styles.fullMapButton, selectedIndex >= record.places.length - 1 && { opacity: .4 }]}><Text style={styles.fullMapText}>다음 장소 →</Text></Pressable>
@@ -110,6 +113,7 @@ export function RecordDetailScreen({ record, onBack, onOpenMap }: Props) {
             <View style={styles.visibility}><Text style={styles.visibilityText}>● {record.visibility}</Text></View>
           </View>
           <Text style={styles.note}>{record.note}</Text>
+          <Pressable accessibilityRole="button" style={styles.fullMapButton} onPress={() => { void shareCourse(record).catch(() => Alert.alert('코스 공유', '공유를 완료하지 못했어요.')); }}><Text style={styles.fullMapText}>코스 공유하기 ↗</Text></Pressable>
           <Text style={styles.address}>{record.author} · {record.handle}</Text>
 
           <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} contentContainerStyle={styles.photoList}>
@@ -151,7 +155,7 @@ const styles = StyleSheet.create({
   fullMapText: { color: colors.primary, fontSize: 12, fontWeight: '500', fontFamily: fonts.medium },
   placeList: { gap: 10, paddingRight: 20 },
   placeCard: { width: 205, borderRadius: radius.medium, overflow: 'hidden', borderWidth: 2, borderColor: 'transparent', backgroundColor: colors.white },
-  placeCardSelected: { borderColor: colors.accent, backgroundColor: '#FFF1F6' },
+  placeCardSelected: { borderColor: colors.accent, backgroundColor: '#E4F3EB' },
   placeImage: { width: '100%', height: 112, backgroundColor: colors.line },
   placeBody: { padding: 12 },
   placeTopline: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },

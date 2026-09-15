@@ -4,6 +4,7 @@ import { colors, fonts, radius } from '../theme';
 import type { ImageSourcePropType, } from 'react-native';
 import type { OutingRecord, Visibility } from '../types';
 import { useState } from 'react';
+import { courseThemes } from '../recordSearch';
 
 type Props = {
   images: ImageSourcePropType[];
@@ -18,6 +19,7 @@ export function CreateRecordScreen({ images, onCancel, onSave }: Props) {
   const [note, setNote] = useState('선선해진 저녁, 음악을 들으며 오래 걸었다.');
   const [location, setLocation] = useState('장소 미설정');
   const [visibility, setVisibility] = useState<Visibility | null>(null);
+  const [themes, setThemes] = useState<string[]>([]);
 
   const save = () => {
     if (!visibility) return;
@@ -29,6 +31,7 @@ export function CreateRecordScreen({ images, onCancel, onSave }: Props) {
       title: title.trim() || '제목 없는 외출',
       note: note.trim(),
       location,
+      themes,
       mood: ['여유', '노을', '공원'],
       images,
       music: ['Inside My Love · RIIZE', 'My Friend · MARK'],
@@ -82,6 +85,8 @@ export function CreateRecordScreen({ images, onCancel, onSave }: Props) {
       </View>
 
       <View style={styles.form}>
+        <Text style={{ color: colors.ink, marginBottom: 10 }}>코스 테마</Text>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 20 }}>{courseThemes.map(theme => <Pressable accessibilityRole="button" accessibilityState={{ selected: themes.includes(theme) }} key={theme} onPress={() => setThemes(current => current.includes(theme) ? current.filter(item => item !== theme) : [...current, theme])} style={{ padding: 12, borderRadius: 12, backgroundColor: themes.includes(theme) ? colors.accentSoft : colors.white }}><Text>{theme}</Text></Pressable>)}</View>
         <FieldLabel number="01" label="어떤 하루였나요?" hint="한 줄이면 충분해요" />
         <TextInput value={title} onChangeText={setTitle} placeholder="오늘의 제목" placeholderTextColor="#A7A1C9" style={styles.titleInput} />
 

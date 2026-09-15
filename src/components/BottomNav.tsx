@@ -3,8 +3,8 @@ import { colors, fonts } from '../theme';
 import type { TabKey } from '../types';
 
 const items: { key: TabKey; icon: string; label: string }[] = [
-  { key: 'home', icon: '⌂', label: '홈' },
-  { key: 'map', icon: '⌖', label: '지도' },
+  { key: 'map', icon: '⌖', label: '내 지도' },
+  { key: 'home', icon: '⌂', label: '발견' },
   { key: 'create', icon: '+', label: '기록' },
   { key: 'profile', icon: '▦', label: '내 피드' },
   { key: 'settings', icon: '◦', label: '설정' },
