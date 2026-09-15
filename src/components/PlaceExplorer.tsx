@@ -21,6 +21,7 @@ export function PlaceExplorer({ record }: { record?: OutingRecord }) {
   const [storageError, setStorageError] = useState('');
   const [notice, setNotice] = useState('');
   const [selectedId, setSelectedId] = useState<string>();
+  const [overlayId, setOverlayId] = useState<string>();
   const [folder, setFolder] = useState('');
   const requestRef = useRef<AbortController | null>(null);
   useEffect(() => {
@@ -31,20 +32,22 @@ export function PlaceExplorer({ record }: { record?: OutingRecord }) {
     }).catch(() => { if (active) setStorageError('저장소를 읽지 못했어요. 새로고침 후 다시 시도해 주세요.'); });
     return () => { active = false; requestRef.current?.abort(); };
   }, []);
-  useEffect(() => { requestRef.current?.abort(); setBusy(false); setMode('course'); setSelectedId(record?.places[0]?.id); }, [record]);
+  useEffect(() => { requestRef.current?.abort(); setBusy(false); setMode('course'); setSelectedId(record?.places[0]?.id); setOverlayId(undefined); }, [record]);
   const places = useMemo(() => mode === 'search' ? results : mode === 'saved' ? saved.filter(p => !folder || p.folder === folder) : record?.places ?? [], [mode, results, saved, folder, record]);
   const selected = places.find(p => p.id === selectedId) ?? places[0];
+  const overlayPlace = places.find(p => p.id === overlayId);
   const stored = saved.find(p => p.id === selected?.id);
-  const selectedImage = mode === 'course' && record?.images.length && selected
-    ? record.images[record.places.findIndex(p => p.id === selected.id)] ?? record.images[0]
+  const overlayImage = mode === 'course' && record?.images.length && overlayPlace
+    ? record.images[record.places.findIndex(p => p.id === overlayPlace.id)] ?? record.images[0]
     : undefined;
   const mapRecord = useMemo<OutingRecord>(() => ({ id: 'place-explorer', author: '', handle: '', date: '', title: '', note: '', location: '', mood: [], music: [], images: [], visibility: '나만 보기', distance: '', duration: '', places }), [places]);
-  const switchMode = (next: typeof mode) => { requestRef.current?.abort(); requestRef.current = null; setBusy(false); setMode(next); setSelectedId(undefined); setError(''); setNotice(''); };
+  const pickPlace = (id: string) => { setSelectedId(id); setOverlayId(id); };
+  const switchMode = (next: typeof mode) => { requestRef.current?.abort(); requestRef.current = null; setBusy(false); setMode(next); setSelectedId(undefined); setOverlayId(undefined); setError(''); setNotice(''); };
   const search = async () => {
     if (!query.trim()) return;
     requestRef.current?.abort();
     const controller = new AbortController(); requestRef.current = controller;
-    setBusy(true); setError(''); setNotice(''); setResults([]); setMode('search'); setSearched(query.trim());
+    setBusy(true); setError(''); setNotice(''); setResults([]); setMode('search'); setSearched(query.trim()); setOverlayId(undefined);
     const timer = setTimeout(() => controller.abort(), 12000);
     try {
       const items = await searchPlaces(query, controller.signal);
@@ -69,18 +72,18 @@ export function PlaceExplorer({ record }: { record?: OutingRecord }) {
     {mode === 'saved' && <ScrollView horizontal contentContainerStyle={s.row}><Pressable style={s.tab} onPress={() => setFolder('')}><Text>전체</Text></Pressable>{[...new Set(saved.map(p => p.folder))].map(value => <Pressable key={value} accessibilityRole="button" accessibilityState={{ selected: folder === value }} style={[s.tab, folder === value && s.active]} onPress={() => setFolder(value)}><Text>{value}</Text></Pressable>)}</ScrollView>}
     <Text style={s.title}>{mode === 'search' ? `‘${searched}’ 검색 결과 · ${places.length}곳` : mode === 'saved' ? '저장한 장소' : '나의 지도'}</Text>
     <View style={s.map}>
-      <CourseMap record={mapRecord} selectedPlaceId={selected?.id} onSelectPlace={setSelectedId} showRoute={mode === 'course'} />
-      {!!selected && <View style={s.mapOverlay}>
-        <Pressable accessibilityRole="button" accessibilityLabel="정보 닫기" onPress={() => setSelectedId(undefined)} style={s.mapOverlayClose}><Text style={s.mapOverlayCloseText}>×</Text></Pressable>
-        {!!selectedImage && <Image source={selectedImage} accessibilityLabel={`${selected.name} 사진`} style={s.mapOverlayImage} resizeMode="cover" />}
-        <Text numberOfLines={1} style={s.mapOverlayTitle}>{selected.name}</Text>
-        <Text numberOfLines={1} style={s.mapOverlayMeta}>{selected.address}</Text>
-        {!!selected.category && <Text numberOfLines={1} style={s.mapOverlayMeta}>{selected.category}</Text>}
+      <CourseMap record={mapRecord} selectedPlaceId={selected?.id} onSelectPlace={pickPlace} showRoute={mode === 'course'} />
+      {!!overlayPlace && <View style={s.mapOverlay}>
+        <Pressable accessibilityRole="button" accessibilityLabel="정보 닫기" onPress={() => setOverlayId(undefined)} style={s.mapOverlayClose}><Text style={s.mapOverlayCloseText}>×</Text></Pressable>
+        {!!overlayImage && <Image source={overlayImage} accessibilityLabel={`${overlayPlace.name} 사진`} style={s.mapOverlayImage} resizeMode="cover" />}
+        <Text numberOfLines={1} style={s.mapOverlayTitle}>{overlayPlace.name}</Text>
+        <Text numberOfLines={1} style={s.mapOverlayMeta}>{overlayPlace.address}</Text>
+        {!!overlayPlace.category && <Text numberOfLines={1} style={s.mapOverlayMeta}>{overlayPlace.category}</Text>}
       </View>}
     </View>
     {!places.length && !busy && <Text>{mode === 'search' ? '검색 결과가 없어요. 지역과 장소명을 함께 입력해 보세요.' : mode === 'saved' ? '아직 저장된 장소가 없어요.' : '등록된 코스 장소가 없어요.'}</Text>}
     {mode === 'search' && !!places.length && <Text style={s.meta}>네이버 지역 검색 결과 · 최대 5곳</Text>}
-    <ScrollView horizontal contentContainerStyle={s.row}>{places.map((place, index) => <Pressable accessibilityRole="button" accessibilityState={{ selected: selected?.id === place.id }} key={place.id} onPress={() => setSelectedId(place.id)} style={[s.tab, selected?.id === place.id && s.active]}><Text>{index + 1} · {place.name}</Text></Pressable>)}</ScrollView>
+    <ScrollView horizontal contentContainerStyle={s.row}>{places.map((place, index) => <Pressable accessibilityRole="button" accessibilityState={{ selected: selected?.id === place.id }} key={place.id} onPress={() => pickPlace(place.id)} style={[s.tab, selected?.id === place.id && s.active]}><Text>{index + 1} · {place.name}</Text></Pressable>)}</ScrollView>
     {selected && <View style={s.panel}><Text style={s.title}>{selected.name}</Text><Text>{selected.address}</Text><Text style={s.meta}>{selected.category || '미분류'}</Text>
       {stored ? <PlaceEditor key={`${stored.id}:${stored.memo}:${stored.folder}`} place={stored} disabled={writing || !ready}
         onSave={(memo, group) => void persist(savedRef.current.map(p => p.id === stored.id ? { ...p, memo, folder: group.trim() || '기본' } : p), '메모와 분류를 저장했어요.')}
