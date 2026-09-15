@@ -12,7 +12,7 @@ type Props = {
   onOpenMap: () => void;
 };
 
-const colors = { paper: '#FFFFFF', white: '#FFFFFF', ink: '#171717', muted: '#61616B', line: '#E5E5EA', primary: '#E2578F', primarySoft: '#FBF2F5', accent: '#E2578F' };
+const colors = { paper: '#FFFFFF', white: '#FFFFFF', ink: '#171717', muted: '#61616B', line: '#E5E5EA', primary: 'rgba(226,87,143,.7)', primarySoft: '#FFFFFF', accent: 'rgba(226,87,143,.7)' };
 const radius = { small: 8, medium: 12, large: 12 };
 
 export function RecordDetailScreen({ record, onBack, onOpenMap }: Props) {

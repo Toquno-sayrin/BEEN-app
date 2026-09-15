@@ -2,15 +2,15 @@ export const colors = {
   ink: '#221F2E',
   muted: '#8B879B',
   line: '#E8E6EF',
-  paper: '#FFF7FA',
+  paper: '#FFFFFF',
   white: '#FFFFFF',
-  primary: '#F2789F',
+  primary: 'rgba(242, 120, 159, 0.7)',
   primarySoft: '#FDE3EC',
-  accent: '#E2578F',
+  accent: 'rgba(226, 87, 143, 0.7)',
   accentSoft: '#FBD0DE',
-  info: '#F6A8C4',
+  info: 'rgba(246, 168, 196, 0.7)',
   infoSoft: '#FDEFF4',
-  brand: '#E2578F',
+  brand: 'rgba(226, 87, 143, 0.7)',
 };
 
 export const tagPalette = [
