@@ -32,7 +32,7 @@ export function RecordDetailScreen({ record, onBack, onOpenMap }: Props) {
     <div className="been-detail">
       <style>{detailCss}</style>
       <header className="bd-header">
-        <button className="bd-brand" onClick={onBack} aria-label="BeENoN 내 기록으로 돌아가기">BeENoN</button>
+        <button className="bd-brand" onClick={onBack} aria-label="BeeNIN 내 기록으로 돌아가기">BeeNIN</button>
         <span className="bd-header-label">PLACES MAKE A DAY</span>
         <button className="bd-text-button" onClick={onBack}>내 기록 <span aria-hidden="true">↗</span></button>
       </header>
@@ -62,7 +62,7 @@ export function RecordDetailScreen({ record, onBack, onOpenMap }: Props) {
           <div className="bd-stops">{record.places.map((place, index) => <button className={`bd-stop ${selected?.id === place.id ? 'is-selected' : ''}`} key={place.id} aria-pressed={selected?.id === place.id} onClick={() => { setSelectedId(place.id); }}><span className="bd-stop-number">{String(index + 1).padStart(2, '0')}</span><div><strong>{place.name}</strong><span>{place.stay} 머묾</span></div><span className="bd-stop-arrow">↗</span></button>)}</div>
         </section>
         <section className="bd-story" aria-labelledby="story-title"><div className="bd-story-copy"><span className="bd-eyebrow">BEHIND THE COURSE</span><h2 id="story-title">이 코스에 남긴 이야기</h2><p>{record.note || '아직 코스 설명이 없습니다.'}</p><span className="bd-story-by">기록한 사람 · {record.author} <span>{record.handle}</span></span><button className="bd-save" onClick={save} disabled={saved}>{saved ? '✓ 이 브라우저에 저장됨' : '코스 저장하기 ↗'}</button><span className="bd-save-hint" role="status">{message || '이 기기의 브라우저에 저장됩니다.'}</span></div><div className="bd-photos">{record.images.slice(0, 2).map((source, index) => <Image key={index} source={source} accessibilityLabel={`${record.author}의 코스 사진 ${index + 1}`} style={{ flex: 1, minWidth: 0, height: 250, borderRadius: 8 }} resizeMode="cover" />)}</div></section>
-        <footer className="bd-footer"><span>BeENoN <span>나의 걸음이 코스가 되는 곳</span></span><span>END OF COURSE</span></footer>
+        <footer className="bd-footer"><span>BeeNIN <span>나의 걸음이 코스가 되는 곳</span></span><span>END OF COURSE</span></footer>
       </main>
     </div>
   );
