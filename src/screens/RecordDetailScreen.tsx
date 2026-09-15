@@ -12,7 +12,7 @@ type Props = {
   onOpenMap: () => void;
 };
 
-const colors = { paper: '#FFFFFF', white: '#FFFFFF', ink: '#171717', muted: '#61616B', line: '#E5E5EA', primary: '#389C83', primarySoft: '#F1F7F3', accent: 'rgba(30,125,95,0.8)' };
+const colors = { paper: '#FFFFFF', white: '#FFFFFF', ink: '#171717', muted: '#61616B', line: '#E5E5EA', primary: '#E2578F', primarySoft: '#FBF2F5', accent: '#E2578F' };
 const radius = { small: 8, medium: 12, large: 12 };
 
 export function RecordDetailScreen({ record, onBack, onOpenMap }: Props) {
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   fullMapText: { color: colors.primary, fontSize: 12, fontWeight: '500', fontFamily: fonts.medium },
   placeList: { gap: 10, paddingRight: 20 },
   placeCard: { width: 205, borderRadius: radius.medium, overflow: 'hidden', borderWidth: 2, borderColor: 'transparent', backgroundColor: colors.white },
-  placeCardSelected: { borderColor: colors.accent, backgroundColor: '#E4F3EB' },
+  placeCardSelected: { borderColor: colors.accent, backgroundColor: '#FDE3EC' },
   placeImage: { width: '100%', height: 112, backgroundColor: colors.line },
   placeBody: { padding: 12 },
   placeTopline: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },

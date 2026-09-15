@@ -44,19 +44,19 @@ export function CourseMap(props: CourseMapProps) {
       const places = props.record.places.map((place, index) => ({ ...place, index })).filter(p => Number.isFinite(p.latitude) && Number.isFinite(p.longitude) && Math.abs(p.latitude) <= 90 && Math.abs(p.longitude) <= 180);
       const first = places[0];
       map = new api.Map(container.current, { center: new api.LatLng(first?.latitude ?? 37.5665, first?.longitude ?? 126.978), zoom: 14, zoomControl: true });
-      const icon = (index: number, selected: boolean) => ({ content: `<button aria-label="장소 ${index + 1} 선택" style="width:36px;height:36px;border:3px solid white;border-radius:50%;background:${selected ? 'rgba(30,125,95,.8)' : 'rgba(124,172,67,.8)'};color:white;font-weight:bold">${index + 1}</button>`, anchor: new api.Point(18, 18) });
+      const icon = (index: number, selected: boolean) => ({ content: `<button aria-label="장소 ${index + 1} 선택" style="width:36px;height:36px;border:3px solid white;border-radius:50%;background:${selected ? '#E2578F' : '#F6A8C4'};color:white;font-weight:bold">${index + 1}</button>`, anchor: new api.Point(18, 18) });
       const bounds = new api.LatLngBounds();
       places.forEach(place => {
         const position = new api.LatLng(place.latitude, place.longitude); bounds.extend(position);
         const marker = new api.Marker({ map, position, icon: icon(place.index, place.id === activeProps.current.selectedPlaceId) });
         api.Event.addListener(marker, 'click', () => activeProps.current.onSelectPlace?.(place.id)); markers.push(marker);
       });
-      if (places.length > 1) { map.fitBounds(bounds); new api.Polyline({ map, path: places.map(p => new api.LatLng(p.latitude, p.longitude)), strokeColor: '#2AA484', strokeOpacity: .8, strokeWeight: 4 }); }
+      if (places.length > 1) { map.fitBounds(bounds); new api.Polyline({ map, path: places.map(p => new api.LatLng(p.latitude, p.longitude)), strokeColor: '#F2789F', strokeOpacity: .8, strokeWeight: 4 }); }
       updateSelection.current = () => markers.forEach((marker, i) => marker.setIcon(icon(places[i].index, places[i].id === activeProps.current.selectedPlaceId)));
     }).catch(error => { console.error('NAVER map initialization failed', error); if (!disposed) setError(error?.message || '지도를 불러오지 못했어요.'); });
     return () => { disposed = true; updateSelection.current = () => {}; markers.forEach(marker => { sdk.Event.clearInstanceListeners(marker); marker.setMap(null); }); map?.destroy(); };
   }, [props.record]);
   useEffect(() => updateSelection.current(), [props.selectedPlaceId]);
   if (!naverClientId) return <MapFallback {...props} />;
-  return <div style={{ flex: 1, minHeight: 300, position: 'relative', width: '100%', height: '100%' }}><div ref={container} aria-label="네이버 코스 지도" style={{ position: 'absolute', inset: 0 }} />{error && <div role="alert" style={{ position: 'absolute', inset: 16, background: '#E4F3EB', padding: 20 }}>지도를 불러오지 못했어요 ({error}). 네이버 지도에서 열기를 이용해 주세요.</div>}</div>;
+  return <div style={{ flex: 1, minHeight: 300, position: 'relative', width: '100%', height: '100%' }}><div ref={container} aria-label="네이버 코스 지도" style={{ position: 'absolute', inset: 0 }} />{error && <div role="alert" style={{ position: 'absolute', inset: 16, background: '#FDE3EC', padding: 20 }}>지도를 불러오지 못했어요 ({error}). 네이버 지도에서 열기를 이용해 주세요.</div>}</div>;
 }
