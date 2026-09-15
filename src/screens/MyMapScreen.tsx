@@ -26,7 +26,7 @@ export function MyMapScreen({ records, onOpenRecord, onCreate }: Props) {
   </ScrollView>;
 }
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.paper }, content: { paddingBottom: 32 }, body: { paddingHorizontal: 20, gap: 12 },
+  screen: { flex: 1, backgroundColor: 'transparent' }, content: { paddingBottom: 32 }, body: { paddingHorizontal: 20, gap: 12 },
   heading: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 12 }, headingText: { fontSize: 20, color: colors.ink, fontFamily: fonts.bold },
   panel: { backgroundColor: colors.white, padding: 16, borderRadius: 14, borderWidth: 1, borderColor: colors.line, gap: 7 }, title: { color: colors.ink, fontSize: 14, fontFamily: fonts.semibold },
   meta: { color: colors.muted, fontSize: 12, lineHeight: 19 }, note: { color: colors.ink, fontSize: 13, lineHeight: 22 }, chips: { flexDirection: 'row', gap: 8 }, chip: { padding: 12, borderRadius: 12, backgroundColor: colors.white }, selected: { backgroundColor: colors.accentSoft },

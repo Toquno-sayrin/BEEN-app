@@ -18,7 +18,7 @@ import { MyMapScreen } from './src/screens/MyMapScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
 import { RecordDetailScreen } from './src/screens/RecordDetailScreen';
 import { SettingsScreen } from './src/screens/SettingsScreen';
-import { colors } from './src/theme';
+import { colors, dotGrid } from './src/theme';
 import type { OutingRecord, TabKey } from './src/types';
 
 type ViewState =
@@ -79,7 +79,7 @@ export default function App() {
   return (
     <SafeAreaView style={styles.appShell}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.paper} />
-      <View style={[styles.phone, Platform.OS === 'web' && view.kind === 'detail' && { maxWidth: '100%' }]}>
+      <View style={[styles.phone, view.kind !== 'detail' && dotGrid, Platform.OS === 'web' && view.kind === 'detail' && { maxWidth: '100%' }]}>
         <View style={styles.content}>
           {view.kind === 'detail' ? (
             <RecordDetailScreen
@@ -98,7 +98,7 @@ export default function App() {
 const styles = StyleSheet.create({
   appShell: {
     flex: 1,
-    backgroundColor: '#E4E2EA',
+    ...dotGrid,
     alignItems: 'center',
   },
   phone: {

@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 export const colors = {
   ink: '#221F2E',
   muted: '#8B879B',
@@ -22,6 +24,13 @@ export const tagPalette = [
 export const gradients = {
   hero: [colors.primarySoft, colors.infoSoft] as const,
 };
+
+// Dotted-grid app background from the BeeNIN concept board. CSS background-image
+// patterns only render through react-native-web on web; native platforms have no
+// tile asset yet, so they keep the flat paper color.
+export const dotGrid = Platform.OS === 'web'
+  ? ({ backgroundColor: '#FFFFFF', backgroundImage: 'radial-gradient(circle, #D8D8E2 1px, transparent 1.5px)', backgroundSize: '22px 22px' } as const)
+  : ({ backgroundColor: colors.paper } as const);
 
 export const fonts = {
   light: 'NotoSansKR_300Light',

@@ -15,7 +15,7 @@ export function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.paper },
+  screen: { flex: 1, backgroundColor: 'transparent' },
   row: { marginHorizontal: 20, minHeight: 58, borderBottomWidth: 1, borderBottomColor: colors.line, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   label: { color: colors.ink, fontSize: 13, fontWeight: '700', fontFamily: fonts.bold },
   soon: { color: colors.muted, fontSize: 11 },
