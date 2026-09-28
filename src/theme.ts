@@ -14,8 +14,10 @@ export const colors = {
   info: 'rgba(124, 172, 67, 0.8)',
   infoSoft: '#EDF5DC',
   brand: '#389C83',
-  blue: 'rgba(50, 140, 197, 0.8)',
-  blueSoft: '#E2F1FC',
+  // Blue family sampled directly from the logo mark, not approximated elsewhere.
+  blue: 'rgba(46, 152, 231, 0.8)', // vivid blue, from the "B" of the wordmark
+  blueMid: '#7ABDF0', // the mark's middle circle
+  blueSoft: '#DCEEFF', // the mark's lightest circle, lightened for washes
 };
 
 // Glassmorphism elevation scale: each level pairs a BlurView intensity with a

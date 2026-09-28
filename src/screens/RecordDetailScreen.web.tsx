@@ -32,7 +32,7 @@ export function RecordDetailScreen({ record, onBack, onOpenMap }: Props) {
     <div className="been-detail">
       <style>{detailCss}</style>
       <header className="bd-header">
-        <button className="bd-brand" onClick={onBack} aria-label="BeeNIN 내 기록으로 돌아가기"><Image source={require('../../assets/beenin-logo.png')} accessibilityLabel="BeeNIN" resizeMode="contain" style={{ width: 204, height: 39 }} /></button>
+        <button className="bd-brand" onClick={onBack} aria-label="BeeNIN 내 기록으로 돌아가기"><Image source={require('../../assets/beenin-logo.png')} accessibilityLabel="BeeNIN" resizeMode="contain" style={{ width: 172, height: 39 }} /></button>
         <span className="bd-header-label">PLACES MAKE A DAY</span>
         <button className="bd-text-button" onClick={onBack}>내 기록 <span aria-hidden="true">↗</span></button>
       </header>

@@ -8,7 +8,7 @@ import { colors } from '../theme';
 import { PLACE_STORAGE_KEY, parseSavedPlaces, searchPlaces, type SavedPlace } from '../placeLibrary';
 import type { OutingPlace, OutingRecord } from '../types';
 
-const BRAND_GRADIENT = ['#78B9F2', '#68C2C0', '#53CD80'] as const;
+const BRAND_GRADIENT = ['#2E98E7', '#7ABDF0', '#389C83'] as const;
 
 function GradientButton({ disabled, onPress, children }: { disabled?: boolean; onPress: () => void; children: ReactNode }) {
   return <Pressable accessibilityRole="button" disabled={disabled} onPress={onPress}>
