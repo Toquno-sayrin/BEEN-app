@@ -131,7 +131,7 @@ function FieldLabel({ number, label, hint }: { number: string; label: string; hi
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: 'transparent' },
-  content: { paddingBottom: 42 },
+  content: { paddingBottom: 110 },
   photoRow: { paddingHorizontal: 20, paddingVertical: 10, flexDirection: 'row', gap: 9 },
   photoWrap: { width: 112, height: 148, borderRadius: radius.small, overflow: 'hidden' },
   photo: { width: '100%', height: '100%' },

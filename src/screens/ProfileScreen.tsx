@@ -72,7 +72,7 @@ function Stat({ value, label }: { value: string; label: string }) {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: 'transparent' },
-  content: { paddingBottom: 24 },
+  content: { paddingBottom: 110 },
   profile: { paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center', gap: 14 },
   avatar: { width: 68, height: 68, borderRadius: 34, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' },
   avatarText: { color: colors.white, fontWeight: '800', fontFamily: fonts.extrabold, fontSize: 24 },

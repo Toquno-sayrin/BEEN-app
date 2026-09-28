@@ -1,13 +1,15 @@
+import { Ionicons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { colors, fonts } from '../theme';
+import { GlassSurface } from './GlassSurface';
+import { colors } from '../theme';
 import type { TabKey } from '../types';
 
-const items: { key: TabKey; icon: string; label: string }[] = [
-  { key: 'map', icon: '⌖', label: '내 지도' },
-  { key: 'home', icon: '⌂', label: '발견' },
-  { key: 'create', icon: '+', label: '기록' },
-  { key: 'profile', icon: '▦', label: '내 피드' },
-  { key: 'settings', icon: '◦', label: '설정' },
+const items: { key: TabKey; icon: keyof typeof Ionicons.glyphMap; label: string }[] = [
+  { key: 'home', icon: 'home-outline', label: '발견' },
+  { key: 'map', icon: 'search-outline', label: '내 지도' },
+  { key: 'create', icon: 'add-outline', label: '기록하기' },
+  { key: 'profile', icon: 'person-outline', label: '내 피드' },
+  { key: 'settings', icon: 'ellipsis-horizontal-outline', label: '설정' },
 ];
 
 type Props = {
@@ -17,86 +19,104 @@ type Props = {
 
 export function BottomNav({ active, onChange }: Props) {
   return (
-    <View style={styles.wrap}>
-      {items.map((item) => {
-        const selected = active === item.key;
-        const isCreate = item.key === 'create';
-        return (
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={item.label}
-            key={item.key}
-            onPress={() => onChange(item.key)}
-            style={styles.item}
-          >
-            <View style={[styles.iconBox, isCreate && styles.createBox]}>
-              <Text style={[styles.icon, selected && styles.active, isCreate && styles.createIcon]}>
-                {item.icon}
-              </Text>
-            </View>
-            {!isCreate && (
-              <Text style={[styles.label, selected && styles.active]}>{item.label}</Text>
-            )}
-          </Pressable>
-        );
-      })}
+    <View style={styles.dock}>
+      <GlassSurface level={3} radius={30} style={styles.pill} contentStyle={styles.pillContent}>
+        {items.map((item) => {
+          const selected = active === item.key;
+          return (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={item.label}
+              accessibilityState={{ selected }}
+              key={item.key}
+              onPress={() => onChange(item.key)}
+              style={styles.item}
+            >
+              <View style={[styles.iconBox, selected && styles.iconBoxActive]}>
+                {item.key === 'profile' ? (
+                  <View style={[styles.avatar, selected && styles.avatarActive]}>
+                    <Text style={styles.avatarText}>Y</Text>
+                    <View style={styles.avatarBadge}><Ionicons name="add" size={9} color={colors.white} /></View>
+                  </View>
+                ) : (
+                  <Ionicons name={item.icon} size={22} color={selected ? colors.blue : colors.muted} />
+                )}
+              </View>
+            </Pressable>
+          );
+        })}
+      </GlassSurface>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: {
-    height: 76,
-    paddingHorizontal: 8,
-    paddingBottom: 8,
-    borderTopWidth: 1,
-    borderTopColor: colors.line,
-    backgroundColor: colors.white,
+  dock: {
+    paddingHorizontal: 16,
+    paddingBottom: 14,
+    paddingTop: 6,
+    alignItems: 'center',
+  },
+  pill: {
+    width: '100%',
+    maxWidth: 360,
+    height: 60,
+  },
+  pillContent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
+    paddingHorizontal: 6,
   },
   item: {
-    width: 68,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 3,
   },
   iconBox: {
-    width: 36,
-    height: 31,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  createBox: {
-    width: 52,
-    height: 52,
-    marginTop: -18,
-    borderRadius: 26,
+  iconBoxActive: {
+    backgroundColor: 'rgba(220,238,255,0.65)',
+    shadowColor: colors.ink,
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
+  },
+  avatar: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     backgroundColor: colors.primary,
-    shadowColor: '#000',
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 3 },
-    elevation: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.9)',
   },
-  icon: {
-    color: colors.muted,
-    fontSize: 25,
-    lineHeight: 27,
+  avatarActive: {
+    borderColor: colors.blue,
   },
-  createIcon: {
+  avatarText: {
     color: colors.white,
-    fontSize: 31,
-    fontWeight: '300', fontFamily: fonts.light,
+    fontSize: 12,
+    fontWeight: '700',
   },
-  label: {
-    color: colors.muted,
-    fontSize: 10,
-    fontWeight: '600', fontFamily: fonts.semibold,
-  },
-  active: {
-    color: colors.primary,
-    fontWeight: '800', fontFamily: fonts.extrabold,
+  avatarBadge: {
+    position: 'absolute',
+    right: -3,
+    bottom: -3,
+    width: 15,
+    height: 15,
+    borderRadius: 8,
+    backgroundColor: colors.blue,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    borderColor: colors.white,
   },
 });

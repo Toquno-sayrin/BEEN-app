@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   filterSelected: { backgroundColor: colors.accentSoft },
   search: { padding: 14, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.white, borderRadius: 12, fontSize: 13, color: colors.ink },
   screen: { flex: 1, backgroundColor: 'transparent' },
-  content: { paddingBottom: 30 },
+  content: { paddingBottom: 110 },
   intro: { color: colors.muted, fontSize: 12, lineHeight: 19, paddingHorizontal: 20, marginBottom: 18 },
   card: { marginHorizontal: 16, marginBottom: 18, borderRadius: radius.large, overflow: 'hidden', backgroundColor: colors.white, shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 8, elevation: 2 },
   authorRow: { padding: 14, flexDirection: 'row', alignItems: 'center' },

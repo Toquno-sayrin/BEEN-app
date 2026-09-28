@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BEEN · 메인 화면 와이어프레임</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef3f7;color:#243d43;font-family:'Malgun Gothic',sans-serif}main{min-height:100vh;display:flex;align-items:center;justify-content:center;gap:72px;padding:40px 24px}.phone{width:390px;height:820px;position:relative;overflow:hidden;border:8px solid white;border-radius:44px;background:#f8fbfd;box-shadow:0 24px 80px #466d8526;flex-shrink:0}.status{height:35px;padding:12px 23px 0;font-size:11px;display:flex;justify-content:space-between}header{height:87px;display:flex;align-items:center;justify-content:center;background:#ffffffb8;position:relative;z-index:1}header img{width:132px;height:62px;object-fit:contain}.world{position:absolute;inset:122px 0 0;background:linear-gradient(150deg,#fff 0%,#f1f8fc 50%,#dceeff 100%)}.caption{position:absolute;left:25px;top:24px;z-index:1}.caption small{color:#7a939b;font-size:11px;letter-spacing:2px}.caption h2{font-size:23px;margin:8px 0;font-weight:600}.caption p{font-size:12px;color:#82959a;margin:0}.map{width:100%;height:100%}.place{cursor:pointer;outline:none}.place:hover,.place:focus{filter:drop-shadow(0 0 6px #389c8380)}.place text{font-family:inherit;font-size:11px;fill:#42655d}.place .badge{fill:#fff;stroke:#389c83;stroke-width:1.4}.place.selected .badge{fill:#389c83}.place.selected .number{fill:#fff}.place .number{fill:#389c83;font-size:12px;font-weight:bold}.nav{position:absolute;bottom:23px;left:20px;right:20px;height:79px;display:flex;align-items:center;justify-content:space-around;border-radius:27px;background:#ffffff9e;border:1px solid white;backdrop-filter:blur(18px);box-shadow:0 10px 28px #407d9c24;z-index:4}button{font:inherit;cursor:pointer}.nav button{border:0;background:none;min-width:74px;min-height:60px;color:#5487a4;font-size:11px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px}.nav svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.6}.nav .plus{border-radius:17px;width:44px;height:36px;background:#e2f1fc;color:#328cc5;font-size:30px;line-height:32px}.home{position:absolute;width:110px;height:4px;background:#263a4440;border-radius:4px;bottom:8px;left:calc(50% - 55px);z-index:5}.sheet{position:absolute;left:17px;right:17px;bottom:116px;border:1px solid white;border-radius:23px;background:#ffffffed;padding:22px;box-shadow:0 8px 35px #35658325;z-index:3}.sheet[hidden]{display:none}.sheet h3{margin:0 26px 8px 0;font-size:18px}.sheet p{font-size:12px;line-height:1.8;margin:6px 0;color:#71848b}.close{position:absolute;right:14px;top:12px;border:0;background:none;font-size:22px;color:#748a93}.sheet input{width:100%;padding:12px;border:1px solid #d5e4ed;border-radius:12px;font:inherit;font-size:13px}.result{display:block;border:0;background:#f0f7f4;padding:10px;margin-top:8px;border-radius:10px;width:100%;text-align:left;color:#346957}.notes{max-width:370px}.eyebrow{font-size:11px;letter-spacing:3px;color:#6c94aa}.notes h1{font-size:33px;line-height:1.4;margin:18px 0}.notes>p{line-height:1.9;font-size:14px;color:#71838b}.note{border-top:1px solid #d9e3e9;padding:20px 0}.note b{font-size:14px}.note p{font-size:13px;line-height:1.8;color:#71838b;margin-bottom:0}.tag{display:inline-block;padding:7px 11px;background:white;border-radius:8px;font-size:11px;color:#6e8a98;margin-top:15px}@media(max-width:800px){main{flex-direction:column;gap:35px;padding:20px 12px}.phone{max-width:100%;height: min(820px, 92svh);min-height:640px}.notes{width:100%;padding:0 12px}}
+.sheet{max-height:calc(100% - 300px);overflow-y:auto}.recommend-card{display:block;width:100%;text-align:left;border:1px solid #dce8ef;border-radius:14px;background:#f3f8fb;padding:14px;margin-top:10px;color:#243d43}.recommend-card strong{display:block;font-size:14px;margin-top:6px}.recommend-card span{font-size:11px;color:#708996}.compare{display:flex;gap:8px;margin-top:14px}.compare button{border:1px solid #ccdfd8;background:#fff;color:#54736b;border-radius:12px;padding:10px 14px;min-height:44px}.compare button[aria-pressed="true"]{background:#389c83;color:white;border-color:#389c83}#my-avatar[hidden]{display:none}.memory-preview{display:flex;gap:14px;align-items:center}.memory-preview img{width:105px;height:132px;object-fit:cover;border-radius:14px}.memory-preview>div{min-width:0;flex:1}.memory-preview h3{font-size:16px;line-height:1.5}.memory-photo{display:block;width:100%;max-height:260px;object-fit:contain;border-radius:14px;background:#edf3f6}.memory-action{border:0;border-radius:14px;background:#389c83;color:white;padding:12px 15px;min-height:44px;width:100%;margin-top:8px}.place.selected{filter:drop-shadow(0 0 6px #389c8380)}.step{color:#389c83!important;font-size:11px!important;letter-spacing:1px}.sheet label{display:block;font-size:12px;margin-top:12px}.sheet select,.sheet textarea{width:100%;padding:10px;border:1px solid #d5e4ed;border-radius:10px;background:white;color:#243d43;font:inherit}.sheet textarea{min-height:72px}.sheet input[type=range]{padding:5px 0;accent-color:#389c83}.sample-photos{display:flex;gap:8px}.sample-photo{flex:1;min-width:0;border:1px solid #d5e4ed;border-radius:12px;padding:5px;background:white;color:#42655d;font-size:11px}.sample-photo img{width:100%;height:78px;object-fit:cover;border-radius:8px}.model-preview{display:block;width:100%;height:145px;background:#f1f7f5;border-radius:15px}.location-preview{width:100%;display:block}.location-preview [role=button]{cursor:pointer}.memo-text{white-space:pre-wrap}.sheet{overscroll-behavior:contain}</style>
+<main><section class="phone" aria-label="메인 화면 시안"><div class="status"><span>9:41</span><span>●●● &nbsp; ▰</span></div><header><img src="../assets/beenin-logo.png" alt="BEEN 로고"></header>
+<div class="world"><div class="caption"><small>MY WORLD</small><h2>내가 만든 세상</h2><p>내가 다녀온 곳들이, 나만의 세계가 된다.</p></div>
+<svg tabindex="0" class="map" viewBox="0 0 374 680" aria-label="장소 세 개가 담긴 예시 지도">
+<defs><pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse" patternTransform="matrix(1 .45 -1 .45 190 130)"><path d="M32 0H0V32" fill="none" stroke="#c7dce8" stroke-width=".7"/></pattern><filter id="shadow"><feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#79a8b1" flood-opacity=".15"/></filter></defs>
+<path d="M-40 210Q110 160 197 220T420 237V680H-40Z" fill="url(#grid)"/>
+<path d="M-40 515Q120 377 199 500T430 461" fill="none" stroke="#c1e3f4" stroke-width="47"/>
+<g filter="url(#shadow)"><path d="M-30 340L206 216 410 320 175 451Z" fill="#e8f1ec"/><path d="M-30 340L175 451 410 320V331L175 464-30 352Z" fill="#d6e5df"/></g>
+<g fill="none" stroke="#fff" stroke-width="14"><path d="M32 308L242 417M111 267L325 370M35 382L272 253"/></g>
+<g class="place" tabindex="0" role="button" aria-label="1번 모퉁이 카페 선택" data-place="0" transform="translate(104 291)"><ellipse cy="48" rx="39" ry="13" fill="#bbd3ca" opacity=".5"/><path d="M-29 0L4 16 4 49-29 32Z" fill="#f5f0e6"/><path d="M4 16L34 0V33L4 49Z" fill="#d6e3db"/><path d="M-34 0L0-19 39-1 4 19Z" fill="#8dbab0"/><path d="M-23 12L-4 21V36L-23 27Z" fill="#a6c5c6"/><path d="M11 23L24 16V34L11 41Z" fill="#90b2ad"/><circle class="badge" cx="3" cy="-37" r="13"/><text class="number" x="3" y="-33" text-anchor="middle">1</text><text x="2" y="72" text-anchor="middle">모퉁이 카페</text></g>
+<g class="place" tabindex="0" role="button" aria-label="2번 작은 공원 선택" data-place="1" transform="translate(251 303)"><ellipse cy="30" rx="34" ry="18" fill="#cce4d4"/><path d="M-10 4V29M14 9V35" stroke="#9aaf96" stroke-width="5"/><ellipse cx="-10" cy="-3" rx="17" ry="24" fill="#a1c7ae"/><ellipse cx="14" cy="4" rx="15" ry="20" fill="#7fb39a"/><circle class="badge" cy="-45" r="13"/><text class="number" y="-41" text-anchor="middle">2</text><text y="61" text-anchor="middle">작은 공원</text></g>
+<g class="place" tabindex="0" role="button" aria-label="3번 동네 서점 선택" data-place="2" transform="translate(175 392)"><ellipse cy="32" rx="32" ry="11" fill="#bbd3ca" opacity=".5"/><path d="M-26-13L3 1V34L-26 20Z" fill="#f6f4ec"/><path d="M3 1L29-13V20L3 34Z" fill="#d4e0e6"/><path d="M-30-13L0-30 33-13 3 5Z" fill="#98bbcd"/><path d="M-20-3L-4 5V17L-20 9Z" fill="#a8c7d7"/><circle class="badge" cy="-48" r="13"/><text class="number" y="-44" text-anchor="middle">3</text><text y="56" text-anchor="middle">동네 서점</text></g>
+<g id="my-avatar" transform="translate(175 487)" role="img" aria-label="방향키와 지도 클릭으로 이동하는 내 캐릭터 예시입니다.">
+<title>내 세계의 작은 분신 · 이동 조작 예시</title>
+<ellipse cx="0" cy="28" rx="17" ry="6" fill="#729b942e"/>
+<path d="M-7 14V25M6 14V25" stroke="#526976" stroke-width="6" stroke-linecap="round"/>
+<path d="M-11 27h7M3 27h8" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+<path d="M-12 3Q0-6 12 3L10 18Q0 23-10 18Z" fill="#7cbdae" stroke="#5da18f" stroke-width="1"/>
+<path d="M-12 5-17 13M12 5 17-2" stroke="#f2cfb7" stroke-width="6" stroke-linecap="round"/>
+<rect x="-3" y="-5" width="6" height="9" rx="3" fill="#efc4a7"/>
+<ellipse cy="-17" rx="17" ry="19" fill="#514946"/>
+<ellipse cy="-14" rx="14" ry="14" fill="#f6d8c1"/>
+<path d="M-15-17Q-17-35 0-35Q18-34 16-15L8-24Q1-17-5-23L-12-15Z" fill="#514946"/>
+<circle cx="-5" cy="-14" r="1.5" fill="#463e3c"/><circle cx="5" cy="-14" r="1.5" fill="#463e3c"/>
+<ellipse cx="-9" cy="-9" rx="3" ry="1.6" fill="#e8ada5"/><ellipse cx="9" cy="-9" rx="3" ry="1.6" fill="#e8ada5"/>
+<path d="M-3-7Q0-4 3-7" fill="none" stroke="#ac7770" stroke-width="1.3" stroke-linecap="round"/>
+<rect x="-18" y="-57" width="36" height="18" rx="9" fill="white" stroke="#d3e6df"/><text y="-44" text-anchor="middle" font-size="10" fill="#388770">나</text>
+</g><text x="187" y="573" text-anchor="middle" fill="#91a8b3" font-size="11">방향키·빈 곳 클릭으로 이동 / 장소를 누르면 기록</text></svg></div>
+<section class="sheet" id="sheet" hidden aria-live="polite"><button class="close" aria-label="닫기">×</button><div id="content"></div></section>
+<nav class="nav" aria-label="하단 메뉴"><button data-action="explore"><svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg>탐색</button><button data-action="add"><span class="plus">+</span>추가</button><button data-action="more"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>더보기</button><button data-action="settings"><svg viewBox="0 0 24 24"><path d="m9 3 6 0 1 3 3 1 2 5-2 5-3 1-1 3H9l-1-3-3-1-2-5 2-5 3-1Z"/><circle cx="12" cy="12" r="3"/></svg>설정</button></nav><div class="home"></div></section>
+<aside class="notes"><span class="eyebrow">BEEN / INTERACTIVE PROTOTYPE</span><h1>앱을 열면,<br>내 세상이 먼저.</h1><p>로고 → 내가 만든 세상.<br>하단에는 탐색·추가·더보기·설정.<br>하나의 메인 화면에 집중한 구성입니다.</p><div class="note"><b>01 &nbsp; 상단 · 기존 로고</b><p>확정된 로고 아래에는 내 세계 지도가 바로 이어집니다.</p></div><div class="note"><b>02 &nbsp; 중심 · 내 세계 지도</b><p>사진 속 노트북·야광봉·검사 키트를 입체 모형으로 표현했습니다. 누르면 원본 사진 카드가 열리고, 자세히 보기에서 큰 사진과 기록을 볼 수 있습니다. 위치와 제목은 예시입니다.</p></div><div class="note"><b>03 &nbsp; 하단 · 떠 있는 메뉴</b><p>탐색은 다른 사람의 계정·피드를 찾는 진입점입니다. 추가를 누르면 장소·지역 검색창이 열립니다. 더보기에서는 추천된 다른 사람의 맵과 피드를 봅니다. 지도는 반투명 바 뒤까지 이어집니다.</p></div><div class="note"><b>비교 · 내 캐릭터</b><div class="compare" role="group" aria-label="캐릭터 시안 비교"><button type="button" data-avatar="on" aria-pressed="true">캐릭터 있음</button><button type="button" data-avatar="off" aria-pressed="false">캐릭터 없음</button></div><p>방향키 또는 지도 빈 곳 클릭으로 이동합니다. 모바일에서는 지도를 탭하세요. 실제 위치와 연결되지 않으며 건물 충돌 판정은 없는 시안입니다. 이 비교 버튼은 시안 검토용이며 앱 메뉴에는 포함되지 않습니다.</p></div><div class="note"><b>체험 순서</b><p>추가 → 장소·주소 입력 → 예시 위치 핀 선택 → 사진·대상 선택 → 크기·회전·색감 편집 → 내 세계에 놓기 → 자세히 보기.<br>추가한 기록은 현재 페이지에서만 유지됩니다. 검색·좌표·3D 생성은 예시이며 실제 서비스와 연결되지 않습니다.</p></div><span class="tag">원본 사진 연결 · 미니어처는 SVG 예시 · 실제 3D 생성 미연결</span></aside></main>
+<script>
+const places=[{name:'모퉁이 카페',category:'카페',address:'예시 주소 · 서울 ○○구 골목길 12',memo:'햇빛이 잘 들던 창가 자리.'},{name:'작은 공원',category:'공원',address:'예시 주소 · 서울 ○○구 공원길 3',memo:'산책하다 잠시 쉬어 간 곳.'},{name:'동네 서점',category:'서점',address:'예시 주소 · 서울 ○○구 책길 7',memo:'다음에 다시 들르고 싶은 서점.'}];
+const sheet=document.querySelector('#sheet'),content=document.querySelector('#content');
+function openPanel(html){content.innerHTML=html;sheet.hidden=false}
+function selectPlace(i){ showMemory(i); }
+document.querySelectorAll('.place').forEach(el=>{el.onclick=()=>selectPlace(Number(el.dataset.place));el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click()}}});
+document.querySelector('.close').onclick=()=>sheet.hidden=true;document.addEventListener('keydown',e=>{if(e.key==='Escape')sheet.hidden=true});
+function searchMap(){
+const query=document.querySelector('#place-query').value.trim();if(!query)return;
+content.querySelector('#results').replaceChildren();
+const results=content.querySelector('#results');places.forEach((p,i)=>{if(![p.name,p.address,p.category].some(v=>v.includes(query)))return;const b=document.createElement('button');b.className='result';b.textContent=p.name+' · '+p.category;b.onclick=()=>selectPlace(i);results.append(b)});if(!results.childElementCount)results.textContent='예시 결과가 없어요. 노트북, 야광봉, 검사 키트로 검색해 보세요.';
+}
+
+document.querySelectorAll('[data-action]').forEach(el=>el.onclick=()=>{const a=el.dataset.action;
+if(a==='explore'){openPanel('<h3>탐색</h3><form><input aria-label="계정이나 피드 검색" placeholder="계정이나 피드 검색"><button class="result" type="submit">검색</button></form><p id="social-status">다른 사람의 계정과 기록을 찾는 공간이에요. 현재는 화면 구성만 확인할 수 있어요.</p>');content.querySelector('form').onsubmit=e=>{e.preventDefault();content.querySelector('#social-status').textContent='계정·피드 검색은 아직 연결되지 않았어요.'};content.querySelector('input').focus()}
+else if(a==='add'){openPanel('<h3>내 세계에 장소 남기기</h3><form id="place-search"><input id="place-query" aria-label="장소나 지역 검색" placeholder="장소나 지역 검색" maxlength="100" required><button class="result" type="submit">검색</button></form><p>예시 검색: 노트북, 야광봉, 검사 키트. 네이버 API는 이 시안에 연결하지 않았어요.</p><div id="results"></div>');content.querySelector('#place-search').onsubmit=e=>{e.preventDefault();searchMap()};content.querySelector('#place-query').focus()}
+else if(a==='more'){
+openPanel('<h3>더보기</h3><p>다른 사람의 맵과 기록을 만나보세요.</p><button class="recommend-card" data-recommend="map"><span>추천 맵 · 예시 계정 @walk</span><strong>주말에 걷기 좋은 동네</strong><p>카페와 공원을 모은 맵 · 장소 3곳</p></button><button class="recommend-card" data-recommend="feed"><span>추천 피드 · 예시 계정 @pages</span><strong>작은 서점에서 보낸 오후</strong><p>책 한 권과 함께 남긴 장소 기록</p></button><p>화면 검토용 가상 콘텐츠입니다. 실제 추천 알고리즘은 연결하지 않았어요.</p>');
+content.querySelectorAll('[data-recommend]').forEach(card=>card.onclick=()=>{const isMap=card.dataset.recommend==='map';openPanel(isMap?'<h3>주말에 걷기 좋은 동네</h3><p>@walk · 예시 맵</p><p>모퉁이 카페 → 작은 공원 → 동네 서점</p><p>다른 사람의 맵 상세 진입을 보여주는 시안입니다.</p><button class="result" id="back-more">추천 목록으로</button>':'<h3>작은 서점에서 보낸 오후</h3><p>@pages · 예시 피드</p><p>동네 서점에서 천천히 책을 고르며 보낸 오후.</p><p>실제 사용자의 기록이 아닌 시안용 콘텐츠입니다.</p><button class="result" id="back-more">추천 목록으로</button>');content.querySelector('#back-more').onclick=()=>document.querySelector('[data-action="more"]').click()});
+}else openPanel('<h3>설정</h3><p>설정 진입 위치를 확인하는 패널입니다.<br>세부 항목은 다음 화면 설계에서 정합니다.</p>')});
+document.querySelectorAll('[data-avatar]').forEach(button=>button.onclick=()=>{const visible=button.dataset.avatar==='on';const avatar=document.querySelector('#my-avatar');avatar.toggleAttribute('hidden',!visible);document.querySelectorAll('[data-avatar]').forEach(option=>option.setAttribute('aria-pressed',String(option===button)))});// Avatar movement uses SVG coordinates, including the responsive viewBox offset.
+const movementMap=document.querySelector('.map');
+const movingAvatar=document.querySelector('#my-avatar');
+const heldKeys=new Set();
+const directions={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};
+const avatarPosition={x:175,y:487};
+let destination=null, movementFrame=0, previousTime=0;
+const clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
+function movementBlocked(){return movingAvatar.hasAttribute('hidden')||!sheet.hidden||document.hidden}
+function stopMovement(){heldKeys.clear();destination=null;cancelAnimationFrame(movementFrame);movementFrame=0;previousTime=0}
+function drawAvatar(){movingAvatar.setAttribute('transform',`translate(${avatarPosition.x} ${avatarPosition.y})`)}
+function animateMovement(time){
+ movementFrame=0;
+ if(movementBlocked()){stopMovement();return}
+ const seconds=previousTime?Math.min((time-previousTime)/1000,.05):1/60;previousTime=time;
+ let dx=0,dy=0;
+ for(const key of heldKeys){dx+=directions[key][0];dy+=directions[key][1]}
+ if(heldKeys.size)destination=null;
+ else if(destination){dx=destination.x-avatarPosition.x;dy=destination.y-avatarPosition.y}
+ const length=Math.hypot(dx,dy),distance=140*seconds;
+ if(length){const step=destination?Math.min(distance,length):distance;avatarPosition.x=clamp(avatarPosition.x+dx/length*step,25,349);avatarPosition.y=clamp(avatarPosition.y+dy/length*step,245,505);drawAvatar();if(destination&&length<=distance)destination=null}
+ if(heldKeys.size||destination)movementFrame=requestAnimationFrame(animateMovement);else previousTime=0;
+}
+function startMovement(){if(!movementFrame)movementFrame=requestAnimationFrame(animateMovement)}
+document.addEventListener('keydown',event=>{
+ if(!directions[event.key]||movementBlocked()||event.altKey||event.ctrlKey||event.metaKey)return;
+ if(event.target.closest('input,textarea,select,button,[contenteditable="true"],[role="button"]'))return;
+ event.preventDefault();heldKeys.add(event.key);startMovement();
+});
+document.addEventListener('keyup',event=>heldKeys.delete(event.key));
+window.addEventListener('blur',stopMovement);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopMovement()});
+movementMap.addEventListener('click',event=>{
+ if(movementBlocked()||event.target.closest('.place'))return;
+ const matrix=movementMap.getScreenCTM();if(!matrix)return;
+ const point=movementMap.createSVGPoint();point.x=event.clientX;point.y=event.clientY;
+ const local=point.matrixTransform(matrix.inverse());
+ if(local.x<0||local.x>374||local.y<210||local.y>540)return;
+ heldKeys.clear();destination={x:clamp(local.x,25,349),y:clamp(local.y-28,245,505)};
+ movementMap.focus({preventScroll:true});startMovement();
+});
+new MutationObserver(()=>{if(movementBlocked())stopMovement()}).observe(sheet,{attributes:true,attributeFilter:['hidden']});
+new MutationObserver(()=>{if(movementBlocked())stopMovement()}).observe(movingAvatar,{attributes:true,attributeFilter:['hidden']});const memories=[
+ {title:'노트북 앞에서 보낸 시간',photo:'../assets/야식.png',subject:'노트북',memo:'노트북과 야식이 함께 담긴 순간.'},
+ {title:'초록빛으로 남은 순간',photo:'../assets/야광봉.png',subject:'야광봉',memo:'초록빛 야광봉을 들고 보낸 시간.'},
+ {title:'사진으로 남긴 하루',photo:'../assets/코로나 검사.png',subject:'검사 키트',memo:'검사 키트를 사진으로 남긴 기록.'}
+];
+const miniatureShapes=[
+ '<path d="M-30-29L15-19 15 15-30 5Z" fill="#303c49" stroke="#172733" stroke-width="2"/><path d="M-25-23L10-15 10 8-25 0Z" fill="#649fcc"/><path d="M-23-3L-8-15 0-7 10-10V8L-25 0Z" fill="#345c87"/><path d="M-30 5L15 15 34 31-14 20Z" fill="#66717b"/><path d="M-24 8L12 17 23 26-12 18Z" fill="#263541"/><path d="M-14 20L34 31V35L-14 24Z" fill="#3c4c59"/>',
+ '<ellipse cy="-15" rx="26" ry="30" fill="#b7f57d" opacity=".22"/><path d="M-4-1H4V34Q0 39-4 34Z" fill="#f6faf4" stroke="#acbeb1"/><path d="M-17-32L0-41 18-32 18-8 0 2-17-8Z" fill="#b7ed78" stroke="#78b943"/><path d="M0-23L18-32V-8L0 2Z" fill="#87ce54"/><path d="M-17-32L0-23 18-32M0-23V2M-11-28V-8M-5-25V-5M6-24V-7M12-27V-11" fill="none" stroke="#eaffbf" stroke-width="2"/>',
+ '<path d="M-34-5L10-23 37-3-7 18Z" fill="#fafcff" stroke="#c3d2dc"/><path d="M-34-5L-7 18 37-3V5L-7 27-34 3Z" fill="#d5e0e8"/><path d="M-21-5L-2-13 10-5-9 4Z" fill="#c1ced7"/><path d="M-18-5L-2-11 7-5-9 2Z" fill="#f4f0ee"/><path d="M-9-8L-1-2" stroke="#a65876" stroke-width="2"/><path d="M17-7L26-1 18 3 11-3Z" fill="#b5c6d0"/>'
+];
+document.querySelectorAll('.place').forEach((el,i)=>{
+ const name=memories[i].subject;
+ el.innerHTML='<ellipse cy="35" rx="39" ry="13" fill="#adc5bc" opacity=".35"/><ellipse cy="30" rx="38" ry="12" fill="#fff" stroke="#d4e5df"/>'+miniatureShapes[i]+'<circle class="badge" cy="-58" r="12"/><text class="number" y="-54" text-anchor="middle">'+(i+1)+'</text><text y="60" text-anchor="middle">'+name+'</text>';
+ el.setAttribute('aria-label',name+' 기록 보기');
+ places[i]={...places[i],name,category:'사진 기록',address:'위치 미지정 · 지도 배치는 예시',memo:memories[i].memo};
+});
+function showMemory(i,detail=false){
+ const memory=memories[i];if(!memory)return;
+ document.querySelectorAll('.place').forEach((el,j)=>el.classList.toggle('selected',i===j));
+ if(detail){
+ openPanel('<h3>'+memory.title+'</h3><img class="memory-photo" src="'+memory.photo+'" alt="'+memory.subject+' 원본 사진"><p>대상: '+memory.subject+'</p><p>위치 미지정 · 지도 배치는 예시</p><p>'+memory.memo+'</p><p>제목·메모는 시안용 예시입니다.</p><button class="memory-action" id="memory-back">사진 카드로 돌아가기</button>');
+ content.querySelector('#memory-back').onclick=()=>showMemory(i);
+ }else{
+ openPanel('<div class="memory-preview"><img src="'+memory.photo+'" alt="'+memory.subject+' 원본 사진"><div><h3>'+memory.title+'</h3><p>예시 기록</p><button class="memory-action" id="memory-detail">자세히 보기 →</button></div></div>');
+ content.querySelector('#memory-detail').onclick=()=>showMemory(i,true);
+ }
+}</script><script src="메인-프로토타입.js"></script></html>

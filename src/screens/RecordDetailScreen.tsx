@@ -46,11 +46,19 @@ export function RecordDetailScreen({ record, onBack, onOpenMap }: Props) {
 
         <View style={styles.body}>
           <View style={styles.selectedPanel}>
-            <Text style={styles.sectionEyebrow}>선택한 장소 · {selectedPlace ? selectedIndex + 1 : 0} / {record.places.length}</Text>
+            <View style={styles.selectedTopline}>
+              <View style={styles.placeNumberLg}><Text style={styles.placeNumberLgText}>{selectedPlace ? selectedIndex + 1 : 0}</Text></View>
+              <Text style={styles.sectionEyebrow}>선택한 장소 · {selectedPlace ? selectedIndex + 1 : 0} / {record.places.length}</Text>
+            </View>
             {selectedPlace ? <>
-              <Text style={styles.selectedName}>{selectedPlace.name}</Text>
-              <Text style={styles.address}>{selectedPlace.address}</Text><Text style={styles.address}>{selectedPlace.category || '미분류'}</Text>
-              <Text style={styles.stay}>{selectedPlace.stay} 머묾</Text>
+              <View style={styles.selectedRow}>
+                {record.images.length > 0 && <Image source={record.images[selectedIndex % record.images.length]} style={styles.selectedImage} />}
+                <View style={styles.selectedInfo}>
+                  <Text style={styles.selectedName}>{selectedPlace.name}</Text>
+                  <Text style={styles.address}>{selectedPlace.address}</Text><Text style={styles.address}>{selectedPlace.category || '미분류'}</Text>
+                  <Text style={styles.stay}>{selectedPlace.stay} 머묾</Text>
+                </View>
+              </View>
               <Text style={styles.note}>{selectedPlace.memo || '남겨진 메모가 없습니다.'}</Text>
               <Pressable accessibilityRole="button" style={styles.fullMapButton} onPress={() => { void openNaverMap(selectedPlace.name, selectedPlace).catch(() => Alert.alert('지도 열기', '지도를 열지 못했어요. 다시 시도해 주세요.')); }}><Text style={styles.fullMapText}>네이버 지도에서 열기 ↗</Text></Pressable>
               <View style={styles.pagination}>
@@ -107,18 +115,19 @@ export function RecordDetailScreen({ record, onBack, onOpenMap }: Props) {
 
           <View style={styles.diaryHeader}>
             <View>
-              <Text style={styles.sectionEyebrow}>MEMORY</Text>
+              <Text style={styles.sectionEyebrow}>작성자 노트</Text>
               <Text style={styles.diaryTitle}>{record.title}</Text>
+              <Text style={styles.address}>{record.author} · {record.handle}</Text>
             </View>
             <View style={styles.visibility}><Text style={styles.visibilityText}>● {record.visibility}</Text></View>
           </View>
           <Text style={styles.note}>{record.note}</Text>
-          <Pressable accessibilityRole="button" style={styles.fullMapButton} onPress={() => { void shareCourse(record).catch(() => Alert.alert('코스 공유', '공유를 완료하지 못했어요.')); }}><Text style={styles.fullMapText}>코스 공유하기 ↗</Text></Pressable>
-          <Text style={styles.address}>{record.author} · {record.handle}</Text>
 
-          <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} contentContainerStyle={styles.photoList}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.photoList}>
             {record.images.map((image, index) => <Image key={index} resizeMode="cover" source={image} style={styles.diaryImage} />)}
           </ScrollView>
+
+          <Pressable accessibilityRole="button" style={styles.fullMapButton} onPress={() => { void shareCourse(record).catch(() => Alert.alert('코스 공유', '공유를 완료하지 못했어요.')); }}><Text style={styles.fullMapText}>코스 공유하기 ↗</Text></Pressable>
 
           <Pressable accessibilityRole="button" onPress={onOpenMap} style={[styles.primaryButton, styles.importButton]}>
             <Text style={styles.primaryButtonText}>내 지도 열기 ↗</Text>
@@ -131,7 +140,13 @@ export function RecordDetailScreen({ record, onBack, onOpenMap }: Props) {
 
 const styles = StyleSheet.create({
   selectedPanel: { paddingVertical: 24, borderBottomWidth: 1, borderBottomColor: colors.line, gap: 8 },
-  selectedName: { fontSize: 24, fontFamily: fonts.medium, color: colors.ink },
+  selectedTopline: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  placeNumberLg: { width: 28, height: 28, borderRadius: 14, backgroundColor: colors.accent, alignItems: 'center', justifyContent: 'center' },
+  placeNumberLgText: { color: colors.white, fontSize: 13, fontWeight: '500', fontFamily: fonts.medium },
+  selectedRow: { flexDirection: 'row', gap: 14, marginTop: 4 },
+  selectedImage: { width: 96, height: 96, borderRadius: radius.medium, backgroundColor: colors.line },
+  selectedInfo: { flex: 1, gap: 2 },
+  selectedName: { fontSize: 20, fontFamily: fonts.medium, color: colors.ink },
   pagination: { flexDirection: 'row', justifyContent: 'space-between', gap: 16, marginTop: 16 },
   screen: { flex: 1, backgroundColor: colors.paper },
   content: { paddingBottom: 42 },
@@ -174,12 +189,12 @@ const styles = StyleSheet.create({
   orderArrow: { color: colors.accent, fontSize: 14, marginHorizontal: 4 },
   divider: { height: 1, backgroundColor: colors.line, marginVertical: 28 },
   diaryHeader: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 },
-  diaryTitle: { maxWidth: 290, color: colors.ink, fontSize: 26, fontWeight: '500', fontFamily: fonts.medium, lineHeight: 38, marginTop: 4 },
+  diaryTitle: { maxWidth: 290, color: colors.ink, fontSize: 19, fontWeight: '500', fontFamily: fonts.medium, lineHeight: 26, marginTop: 4 },
   visibility: { paddingHorizontal: 8, paddingVertical: 5, borderRadius: 12, backgroundColor: colors.primarySoft },
   visibilityText: { color: colors.primary, fontSize: 12, fontWeight: '700', fontFamily: fonts.bold },
   note: { color: colors.muted, fontSize: 14, lineHeight: 24, marginTop: 10 },
-  photoList: { gap: 9, marginTop: 18, paddingRight: 20 },
-  diaryImage: { width: 238, height: 310, borderRadius: radius.medium, backgroundColor: colors.line },
+  photoList: { gap: 8, marginTop: 14, paddingRight: 20 },
+  diaryImage: { width: 150, height: 150, borderRadius: radius.medium, backgroundColor: colors.line },
   primaryButton: { marginTop: 25, paddingVertical: 15, borderRadius: radius.medium, backgroundColor: colors.primary, alignItems: 'center' },
   importButton: { backgroundColor: colors.accent },
   primaryButtonText: { color: colors.white, fontSize: 13, fontWeight: '500', fontFamily: fonts.medium },

@@ -59,7 +59,7 @@ export default function App() {
       case 'home':
         return <HomeScreen records={discoveryRecords} onOpenRecord={(record) => openRecord(record, 'home')} />;
       case 'map':
-        return <MyMapScreen records={records} onOpenRecord={(record) => openRecord(record, 'map')} onCreate={() => changeTab('create')} />;
+        return <MyMapScreen records={records} />;
       case 'create':
         return <CreateRecordScreen images={sampleImages} onCancel={() => changeTab('profile')} onSave={saveRecord} />;
       case 'settings':
@@ -89,7 +89,11 @@ export default function App() {
             />
           ) : renderTab()}
         </View>
-        {view.kind === 'tab' ? <BottomNav active={activeTab} onChange={changeTab} /> : null}
+        {view.kind === 'tab' ? (
+          <View style={styles.navOverlay}>
+            <BottomNav active={activeTab} onChange={changeTab} />
+          </View>
+        ) : null}
       </View>
     </SafeAreaView>
   );
@@ -106,8 +110,15 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 480,
     backgroundColor: colors.paper,
+    position: 'relative',
   },
   content: {
     flex: 1,
+  },
+  navOverlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 });
