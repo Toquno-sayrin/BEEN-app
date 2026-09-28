@@ -1,21 +1,21 @@
 import { Platform } from 'react-native';
 
 export const colors = {
-  ink: '#221F2E',
-  muted: '#8B879B',
-  line: '#E8E6EF',
-  // Base app background: reference swatch (assets/배경.jpg) lightened 50% toward white.
-  paper: '#F7F8FA',
+  // Neutrals matched to the "MY WORLD" wireframe's blue-teal-gray tone (기록/2026-09-28-메인-와이어프레임.html).
+  ink: '#243D43',
+  muted: '#71848B',
+  line: '#D9E3E9',
+  paper: '#F8FBFD',
   white: '#FFFFFF',
   primary: 'rgba(30, 125, 95, 0.8)',
-  primarySoft: '#E4F3EB',
+  primarySoft: '#F0F7F4',
   accent: 'rgba(42, 164, 132, 0.8)',
   accentSoft: '#D7EFE5',
   info: 'rgba(124, 172, 67, 0.8)',
   infoSoft: '#EDF5DC',
   brand: '#389C83',
-  blue: 'rgba(46, 152, 231, 0.8)',
-  blueSoft: '#DCEEFF',
+  blue: 'rgba(50, 140, 197, 0.8)',
+  blueSoft: '#E2F1FC',
 };
 
 // Glassmorphism elevation scale: each level pairs a BlurView intensity with a
@@ -56,7 +56,7 @@ export const gradients = {
 // patterns only render through react-native-web on web; native platforms have no
 // tile asset yet, so they keep the flat paper color.
 export const dotGrid = Platform.OS === 'web'
-  ? ({ backgroundColor: colors.paper, backgroundImage: 'radial-gradient(circle, #D6D7E0 1px, transparent 1.5px)', backgroundSize: '22px 22px' } as const)
+  ? ({ backgroundColor: colors.paper, backgroundImage: 'radial-gradient(circle, #C7DCE8 1px, transparent 1.5px)', backgroundSize: '22px 22px' } as const)
   : ({ backgroundColor: colors.paper } as const);
 
 export const fonts = {
