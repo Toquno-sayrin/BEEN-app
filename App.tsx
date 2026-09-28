@@ -8,17 +8,16 @@ import {
   NotoSansKR_900Black,
   useFonts,
 } from '@expo-google-fonts/noto-sans-kr';
-import { useMemo, useState } from 'react';
-import { Platform, SafeAreaView, StatusBar, StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { Platform, Pressable, Text, SafeAreaView, StatusBar, StyleSheet, View } from 'react-native';
 import { BottomNav } from './src/components/BottomNav';
 import { discoveryRecords, sampleRecord } from './src/data/sampleRecords';
-import { CreateRecordScreen } from './src/screens/CreateRecordScreen';
 import { HomeScreen } from './src/screens/HomeScreen';
-import { MyMapScreen } from './src/screens/MyMapScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
 import { RecordDetailScreen } from './src/screens/RecordDetailScreen';
 import { SettingsScreen } from './src/screens/SettingsScreen';
-import { colors } from './src/theme';
+import { WorldScreen } from './src/screens/WorldScreen';
+import { colors, dotGrid } from './src/theme';
 import type { OutingRecord, TabKey } from './src/types';
 
 type ViewState =
@@ -35,9 +34,8 @@ export default function App() {
     NotoSansKR_800ExtraBold,
     NotoSansKR_900Black,
   });
-  const [records, setRecords] = useState<OutingRecord[]>([sampleRecord]);
+  const [records] = useState<OutingRecord[]>([sampleRecord]);
   const [view, setView] = useState<ViewState>({ kind: 'tab', tab: 'map' });
-  const sampleImages = useMemo(() => sampleRecord.images, []);
 
   if (!fontsLoaded) return null;
 
@@ -47,21 +45,17 @@ export default function App() {
   const openRecord = (record: OutingRecord, returnTab: TabKey = activeTab) =>
     setView({ kind: 'detail', record, returnTab });
 
-  const saveRecord = (record: OutingRecord) => {
-    setRecords((current) => [record, ...current]);
-    setView({ kind: 'detail', record, returnTab: 'profile' });
-  };
-
   const renderTab = () => {
     if (view.kind !== 'tab') return null;
 
     switch (view.tab) {
       case 'home':
         return <HomeScreen records={discoveryRecords} onOpenRecord={(record) => openRecord(record, 'home')} />;
+      case 'explore':
+        return <HomeScreen searchOnly records={discoveryRecords} onOpenRecord={(record) => openRecord(record, 'explore')} />;
       case 'map':
-        return <MyMapScreen records={records} onOpenRecord={(record) => openRecord(record, 'map')} onCreate={() => changeTab('create')} />;
       case 'create':
-        return <CreateRecordScreen images={sampleImages} onCancel={() => changeTab('profile')} onSave={saveRecord} />;
+        return <WorldScreen adding={view.tab === 'create'} onHome={() => changeTab('map')} records={records} onOpenRecord={(record) => openRecord(record, 'map')} />;
       case 'settings':
         return <SettingsScreen />;
       case 'profile':
@@ -79,8 +73,9 @@ export default function App() {
   return (
     <SafeAreaView style={styles.appShell}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.paper} />
-      <View style={[styles.phone, Platform.OS === 'web' && view.kind === 'detail' && { maxWidth: '100%' }]}>
+      <View style={[styles.phone, view.kind !== 'detail' && dotGrid, Platform.OS === 'web' && view.kind === 'detail' && { maxWidth: '100%' }]}>
         <View style={styles.content}>
+          {view.kind==='tab' && !['map','create'].includes(view.tab) && <Pressable accessibilityRole="button" onPress={()=>changeTab('map')} style={{padding:14}}><Text style={{color:colors.brand}}>← 내 세계</Text></Pressable>}
           {view.kind === 'detail' ? (
             <RecordDetailScreen
               record={view.record}
@@ -89,7 +84,11 @@ export default function App() {
             />
           ) : renderTab()}
         </View>
-        {view.kind === 'tab' ? <BottomNav active={activeTab} onChange={changeTab} /> : null}
+        {view.kind === 'tab' ? (
+          <View pointerEvents="box-none" style={styles.navOverlay}>
+            <BottomNav active={activeTab} onChange={changeTab} />
+          </View>
+        ) : null}
       </View>
     </SafeAreaView>
   );
@@ -98,7 +97,7 @@ export default function App() {
 const styles = StyleSheet.create({
   appShell: {
     flex: 1,
-    backgroundColor: '#E4E2EA',
+    ...dotGrid,
     alignItems: 'center',
   },
   phone: {
@@ -106,8 +105,17 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 480,
     backgroundColor: colors.paper,
+    position: 'relative',
   },
   content: {
     flex: 1,
+  },
+  navOverlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 10,
+    elevation: 20,
   },
 });

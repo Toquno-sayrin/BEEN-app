@@ -1,17 +1,46 @@
+import { Platform } from 'react-native';
+
 export const colors = {
-  ink: '#221F2E',
-  muted: '#8B879B',
-  line: '#E8E6EF',
-  paper: '#FFFFFF',
+  // Neutrals matched to the "MY WORLD" wireframe's blue-teal-gray tone (기록/2026-09-28-메인-와이어프레임.html).
+  ink: '#243D43',
+  muted: '#71848B',
+  line: '#D9E3E9',
+  paper: '#F8FBFD',
   white: '#FFFFFF',
-  primary: 'rgba(242, 120, 159, 0.7)',
-  primarySoft: '#FDE3EC',
-  accent: 'rgba(226, 87, 143, 0.7)',
-  accentSoft: '#FBD0DE',
-  info: 'rgba(246, 168, 196, 0.7)',
-  infoSoft: '#FDEFF4',
-  brand: 'rgba(226, 87, 143, 0.7)',
+  primary: 'rgba(30, 125, 95, 0.8)',
+  primarySoft: '#F0F7F4',
+  accent: 'rgba(42, 164, 132, 0.8)',
+  accentSoft: '#D7EFE5',
+  info: 'rgba(124, 172, 67, 0.8)',
+  infoSoft: '#EDF5DC',
+  brand: '#389C83',
+  blue: 'rgba(50, 140, 197, 0.8)',
+  blueSoft: '#E2F1FC',
 };
+
+// Glassmorphism elevation scale: each level pairs a BlurView intensity with a
+// translucent tint, border, and shadow, so deeper-floating cards read as more
+// "lifted" than shallow ones. Use with the GlassSurface component.
+export const glass = {
+  1: {
+    blurIntensity: 20,
+    tint: 'rgba(255,255,255,0.35)',
+    border: 'rgba(255,255,255,0.5)',
+    shadow: { shadowColor: colors.ink, shadowOpacity: 0.06, shadowRadius: 8, shadowOffset: { width: 0, height: 3 }, elevation: 2 },
+  },
+  2: {
+    blurIntensity: 35,
+    tint: 'rgba(255,255,255,0.45)',
+    border: 'rgba(255,255,255,0.6)',
+    shadow: { shadowColor: colors.ink, shadowOpacity: 0.12, shadowRadius: 16, shadowOffset: { width: 0, height: 6 }, elevation: 6 },
+  },
+  3: {
+    blurIntensity: 50,
+    tint: 'rgba(255,255,255,0.55)',
+    border: 'rgba(255,255,255,0.7)',
+    shadow: { shadowColor: colors.ink, shadowOpacity: 0.2, shadowRadius: 24, shadowOffset: { width: 0, height: 10 }, elevation: 12 },
+  },
+} as const;
 
 export const tagPalette = [
   { bg: colors.primarySoft, text: colors.primary },
@@ -22,6 +51,13 @@ export const tagPalette = [
 export const gradients = {
   hero: [colors.primarySoft, colors.infoSoft] as const,
 };
+
+// Dotted-grid app background from the BeeNIN concept board. CSS background-image
+// patterns only render through react-native-web on web; native platforms have no
+// tile asset yet, so they keep the flat paper color.
+export const dotGrid = Platform.OS === 'web'
+  ? ({ backgroundColor: colors.paper, backgroundImage: 'radial-gradient(circle, #C7DCE8 1px, transparent 1.5px)', backgroundSize: '22px 22px' } as const)
+  : ({ backgroundColor: colors.paper } as const);
 
 export const fonts = {
   light: 'NotoSansKR_300Light',

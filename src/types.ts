@@ -1,6 +1,6 @@
 import type { ImageSourcePropType } from 'react-native';
 
-export type TabKey = 'home' | 'map' | 'create' | 'profile' | 'settings';
+export type TabKey = 'home' | 'map' | 'create' | 'profile' | 'settings' | 'explore';
 
 export type Visibility = '나만 보기' | '친구 공개' | '전체 공개';
 
@@ -13,6 +13,7 @@ export type OutingPlace = {
   longitude: number;
   stay: string;
   memo: string;
+  miniature?: { kind: 'laptop' | 'lightstick' | 'keepsake'; color: string; rotation: number; size: number };
 };
 
 export type OutingRecord = {

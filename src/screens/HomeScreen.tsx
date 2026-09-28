@@ -6,21 +6,21 @@ import { ScreenHeader } from '../components/ScreenHeader';
 import { colors, fonts, radius } from '../theme';
 import type { OutingRecord } from '../types';
 
-type Props = { records: OutingRecord[]; onOpenRecord: (record: OutingRecord) => void };
+type Props = { records: OutingRecord[]; onOpenRecord: (record: OutingRecord) => void; searchOnly?: boolean };
 
-export function HomeScreen({ records, onOpenRecord }: Props) {
+export function HomeScreen({ records, onOpenRecord, searchOnly=false }: Props) {
   const [query, setQuery] = useState('');
   const [mode, setMode] = useState<SearchMode>('코스');
   const [theme, setTheme] = useState('');
-  const visible = filterRecords(records.filter(record => record.visibility === '전체 공개'), query, mode, theme);
+  const visible = searchOnly ? records.filter(r=>r.visibility==='전체 공개' && [r.title,r.author,r.handle,r.note].some(t=>t.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()))) : filterRecords(records.filter(record => record.visibility === '전체 공개'), query, mode, theme);
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
       <Brand />
-      <ScreenHeader eyebrow="DISCOVER" title="새로운 코스 발견" />
+      <ScreenHeader eyebrow="DISCOVER" title={searchOnly?'계정과 기록 탐색':'더보기 · 추천 코스'} />
       <View style={styles.filters}>
-        <View style={styles.filterRow}>{(['코스', '지역', '테마'] as const).map(item => <Pressable accessibilityRole="button" accessibilityState={{ selected: mode === item }} key={item} onPress={() => setMode(item)} style={[styles.filter, mode === item && styles.filterSelected]}><Text>{item} 검색</Text></Pressable>)}</View>
-        <TextInput accessibilityLabel={`${mode} 검색`} placeholder={mode === '지역' ? '지역이나 주소를 검색하세요' : mode === '테마' ? '라이딩, 러닝, 카페공부, 데이트' : '코스 이름이나 장소를 검색하세요'} value={query} onChangeText={setQuery} style={styles.search} />
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterRow}>{['', ...courseThemes].map(item => <Pressable accessibilityRole="button" accessibilityState={{ selected: theme === item }} key={item} onPress={() => setTheme(item)} style={[styles.filter, theme === item && styles.filterSelected]}><Text>{item || '전체'}</Text></Pressable>)}</ScrollView>
+        {!searchOnly&&<View style={styles.filterRow}>{(['코스', '지역', '테마'] as const).map(item => <Pressable accessibilityRole="button" accessibilityState={{ selected: mode === item }} key={item} onPress={() => setMode(item)} style={[styles.filter, mode === item && styles.filterSelected]}><Text>{item} 검색</Text></Pressable>)}</View>}
+        <TextInput accessibilityLabel={searchOnly?'계정·피드 검색':`${mode} 검색`} placeholder={searchOnly?'계정 이름이나 기록 검색':mode === '지역' ? '지역이나 주소를 검색하세요' : mode === '테마' ? '라이딩, 러닝, 카페공부, 데이트' : '코스 이름이나 장소를 검색하세요'} value={query} onChangeText={setQuery} style={styles.search} />
+        {!searchOnly&&<ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterRow}>{['', ...courseThemes].map(item => <Pressable accessibilityRole="button" accessibilityState={{ selected: theme === item }} key={item} onPress={() => setTheme(item)} style={[styles.filter, theme === item && styles.filterSelected]}><Text>{item || '전체'}</Text></Pressable>)}</ScrollView>}
         <Text style={styles.note}>샘플 피드 · {visible.length}개의 코스</Text>
         {!visible.length && <Text style={styles.note}>검색 결과가 없어요. 검색어나 테마를 바꿔보세요.</Text>}
       </View>
@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
   filter: { paddingHorizontal: 12, paddingVertical: 12, backgroundColor: colors.white, borderRadius: 12 },
   filterSelected: { backgroundColor: colors.accentSoft },
   search: { padding: 14, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.white, borderRadius: 12, fontSize: 13, color: colors.ink },
-  screen: { flex: 1, backgroundColor: colors.paper },
-  content: { paddingBottom: 30 },
+  screen: { flex: 1, backgroundColor: 'transparent' },
+  content: { paddingBottom: 110 },
   intro: { color: colors.muted, fontSize: 12, lineHeight: 19, paddingHorizontal: 20, marginBottom: 18 },
   card: { marginHorizontal: 16, marginBottom: 18, borderRadius: radius.large, overflow: 'hidden', backgroundColor: colors.white, shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 8, elevation: 2 },
   authorRow: { padding: 14, flexDirection: 'row', alignItems: 'center' },
