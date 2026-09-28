@@ -5,13 +5,11 @@ import { colors } from '../theme';
 import type { TabKey } from '../types';
 
 const items: { key: TabKey; icon: keyof typeof Ionicons.glyphMap; label: string }[] = [
-  { key: 'home', icon: 'home-outline', label: '발견' },
-  { key: 'map', icon: 'search-outline', label: '내 지도' },
-  { key: 'create', icon: 'add-outline', label: '기록하기' },
-  { key: 'profile', icon: 'person-outline', label: '내 피드' },
-  { key: 'settings', icon: 'ellipsis-horizontal-outline', label: '설정' },
+  { key: 'explore', icon: 'search-outline', label: '탐색' },
+  { key: 'create', icon: 'add-outline', label: '추가' },
+  { key: 'home', icon: 'ellipsis-horizontal-outline', label: '더보기' },
+  { key: 'settings', icon: 'settings-outline', label: '설정' },
 ];
-
 type Props = {
   active: TabKey;
   onChange: (tab: TabKey) => void;
@@ -20,7 +18,7 @@ type Props = {
 export function BottomNav({ active, onChange }: Props) {
   return (
     <View style={styles.dock}>
-      <GlassSurface level={3} radius={30} style={styles.pill} contentStyle={styles.pillContent}>
+      <GlassSurface fill level={3} radius={30} style={styles.pill} contentStyle={styles.pillContent}>
         {items.map((item) => {
           const selected = active === item.key;
           return (
@@ -42,6 +40,7 @@ export function BottomNav({ active, onChange }: Props) {
                   <Ionicons name={item.icon} size={22} color={selected ? colors.blue : colors.muted} />
                 )}
               </View>
+              <Text style={{fontSize:10,color:selected?colors.blue:colors.muted}}>{item.label}</Text>
             </Pressable>
           );
         })}
@@ -60,7 +59,7 @@ const styles = StyleSheet.create({
   pill: {
     width: '100%',
     maxWidth: 360,
-    height: 60,
+    height: 72,
   },
   pillContent: {
     flexDirection: 'row',

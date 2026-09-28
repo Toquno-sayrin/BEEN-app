@@ -11,14 +11,16 @@ type Props = {
   style?: StyleProp<ViewStyle>;
   /** Padding/gap/layout for the content itself, applied inside the clipped blur box. */
   contentStyle?: StyleProp<ViewStyle>;
+  /** Fill a host with an explicitly assigned height, such as the navigation dock. */
+  fill?: boolean;
   children: ReactNode;
 };
 
-export function GlassSurface({ level = 2, radius = 16, style, contentStyle, children }: Props) {
+export function GlassSurface({ level = 2, radius = 16, style, contentStyle, fill = false, children }: Props) {
   const g = glass[level];
   return (
     <View style={[g.shadow, { borderRadius: radius }, style]}>
-      <View style={[styles.clip, { borderRadius: radius }]}>
+      <View style={[styles.clip, fill && StyleSheet.absoluteFill, { borderRadius: radius }]}>
         <BlurView intensity={g.blurIntensity} tint="light" style={StyleSheet.absoluteFill} />
         <View style={[StyleSheet.absoluteFill, styles.tintLayer, { backgroundColor: g.tint, borderColor: g.border }]} />
         <View style={[styles.content, contentStyle]}>{children}</View>

@@ -5,6 +5,61 @@
   memories.forEach((m,i)=>Object.assign(m,{shape:i,rotation:0,size:1,tone:0,position:positions[i],location:'위치 미지정 · 예시 기록'}));
   const escape = value => String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   let draft=null, editing=null;
+  let activeCourse=null, avatarWasHidden=false;
+  const courses=[{title:'함께 남긴 순간들',ids:[0,1]},{title:'일상의 기록 모음',ids:[0,2]}];
+  const courseBar=document.createElement('div');
+  courseBar.className='course-bar';
+  courseBar.innerHTML='<button id="my-courses">내 코스</button><button id="course-fit" hidden>코스 전체</button><button id="world-back" hidden>내 세계로</button><span id="course-name"></span>';
+  document.querySelector('.world').append(courseBar);
+  const courseName=courseBar.querySelector('#course-name');
+  const worldViewBox='0 100 374 680';
+  movementMap.setAttribute('viewBox',worldViewBox);
+  function fitRecords(ids){
+    const points=ids.map(i=>memories[i]?.position).filter(Boolean);
+    if(!points.length){movementMap.setAttribute('viewBox',worldViewBox);return}
+    const xs=points.map(p=>p[0]),ys=points.map(p=>p[1]);
+    const width=Math.max(344,Math.max(...xs)-Math.min(...xs)+140);
+    const height=Math.max(width*680/374,Math.max(...ys)-Math.min(...ys)+400);
+    const finalWidth=height*374/680;
+    const cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2;
+    // Keep most of the overview framing: at most ~9% zoom for nearby records.
+    const centerX=187+(cx-187)*0.3;
+    const top=100+(cy-height*0.35-100)*0.3;
+    movementMap.setAttribute('viewBox',`${centerX-finalWidth/2} ${top} ${finalWidth} ${height}`);
+  }
+  function applyCourse(){
+    movementMap.querySelector('#course-route')?.remove();
+    movementMap.querySelectorAll('.place').forEach(el=>{
+      const index=Number(el.dataset.place),order=activeCourse?.ids.indexOf(index);
+      el.style.display=activeCourse&&order===-1?'none':'';
+      el.querySelector('.number').textContent=activeCourse?order+1:index+1;
+    });
+    if(activeCourse){
+      const points=activeCourse.ids.map(i=>memories[i]?.position).filter(Boolean);
+      const route=document.createElementNS('http://www.w3.org/2000/svg','polyline');
+      route.id='course-route';route.setAttribute('points',points.map(p=>p.join(',')).join(' '));
+      route.setAttribute('fill','none');route.setAttribute('stroke','#389c83');route.setAttribute('stroke-width','3');route.setAttribute('stroke-dasharray','6 6');
+      movementMap.insertBefore(route,movementMap.querySelector('.place')||movingAvatar);
+      fitRecords(activeCourse.ids);
+    }
+  }
+  function resetWorld(){
+    if(activeCourse)movingAvatar.toggleAttribute('hidden',avatarWasHidden);
+    activeCourse=null;applyCourse();movementMap.setAttribute('viewBox',worldViewBox);
+    courseName.textContent='';courseBar.querySelector('#course-fit').hidden=true;courseBar.querySelector('#world-back').hidden=true;
+    sheet.hidden=true;
+  }
+  function pickCourse(course){
+    if(!activeCourse)avatarWasHidden=movingAvatar.hasAttribute('hidden');
+    activeCourse=course;stopMovement();movingAvatar.setAttribute('hidden','');sheet.hidden=true;
+    courseName.textContent=course.title;courseBar.querySelector('#course-fit').hidden=false;courseBar.querySelector('#world-back').hidden=false;applyCourse();
+  }
+  courseBar.querySelector('#my-courses').onclick=()=>{
+    panel('내 코스','코스를 골라보세요',courses.map((c,i)=>`<button class="result" data-course="${i}">${escape(c.title)} · ${c.ids.length}곳</button>`).join('')+'<p>첨부 사진으로 묶은 예시 코스입니다. 연결선은 방문 순서이며 실제 길찾기 경로가 아닙니다.</p>');
+    content.querySelectorAll('[data-course]').forEach(b=>b.onclick=()=>pickCourse(courses[Number(b.dataset.course)]));
+  };
+  courseBar.querySelector('#world-back').onclick=resetWorld;
+  courseBar.querySelector('#course-fit').onclick=()=>{sheet.hidden=true;if(activeCourse)fitRecords(activeCourse.ids)};
   const urls=[];
   const button=(id,label)=>`<button class="memory-action" id="${id}">${label}</button>`;
   const on=(id,handler)=>content.querySelector('#'+id).onclick=handler;
@@ -20,6 +75,7 @@
       g.onclick=()=>showMemory(i);g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();showMemory(i)}};
       movementMap.insertBefore(g,movingAvatar);
     });
+    applyCourse();
   }
   function search(){
     panel('01 / 04 · 장소','어디에 남길까요?',`<form id="location-form"><label>장소 또는 주소<input id="location" maxlength="100" required placeholder="예: 성수 카페 / 서울 성동구…"></label>${button('search-location','위치 찾기')}</form><p>검색·좌표는 예시입니다. 네이버 API는 연결하지 않았어요.</p><div id="location-results"></div>`);
@@ -66,6 +122,8 @@
   }
   showMemory=(i,detail=false)=>{
     const m=memories[i];if(!m)return;
+    if(activeCourse&&!activeCourse.ids.includes(i))resetWorld();
+    if(activeCourse)fitRecords([i]);
     movementMap.querySelectorAll('.place').forEach(el=>el.classList.toggle('selected',Number(el.dataset.place)===i));
     if(detail){
       panel('04 / 04 · 내 기록',escape(m.title),`<img class="memory-photo" src="${escape(m.photo)}" alt="${escape(m.subject)} 원본 사진"><p>${escape(m.location)}</p><p>대상: ${escape(m.subject)}</p><p class="memo-text">${escape(m.memo||'아직 메모가 없어요.')}</p>${button('edit-memory','미니어처·기록 편집')}<button class="result" id="back-memory">사진 카드로 돌아가기</button>`);
@@ -75,6 +133,7 @@
     }
   };
   document.querySelector('[data-action="add"]').onclick=()=>{
+    resetWorld();
     editing=null;const n=memories.length-3;
     draft={title:'',memo:'',photo:'',shape:0,subject:'노트북',rotation:0,size:1,tone:0,position:[65+(n%3)*110,365+Math.floor(n/3)%2*85],location:''};search();
   };
