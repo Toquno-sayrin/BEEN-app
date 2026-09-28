@@ -44,6 +44,9 @@ jobs:
             {} +
           touch dist/.nojekyll
 
+      - name: Include interactive prototype
+        run: cp -R prototype dist/prototype
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
