@@ -17,17 +17,15 @@ export function HomeScreen({ records, onOpenRecord, searchOnly=false }: Props) {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
       <Brand />
-      <ScreenHeader eyebrow="DISCOVER" title={searchOnly?'계정과 기록 탐색':'더보기 · 추천 코스'} />
+      <ScreenHeader title={searchOnly?'계정과 기록 탐색':'더보기 · 추천 코스'} />
       <View style={styles.filters}>
         {!searchOnly&&<View style={styles.filterRow}>{(['코스', '지역', '테마'] as const).map(item => <Pressable accessibilityRole="button" accessibilityState={{ selected: mode === item }} key={item} onPress={() => setMode(item)} style={[styles.filter, mode === item && styles.filterSelected]}><Text>{item} 검색</Text></Pressable>)}</View>}
         <LinearGradient colors={gradients.search} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.searchBorder}>
           <TextInput accessibilityLabel={searchOnly?'계정·피드 검색':`${mode} 검색`} placeholder={searchOnly?'계정 이름이나 기록 검색':mode === '지역' ? '지역이나 주소를 검색하세요' : mode === '테마' ? '라이딩, 러닝, 카페공부, 데이트' : '코스 이름이나 장소를 검색하세요'} value={query} onChangeText={setQuery} style={styles.search} />
         </LinearGradient>
         {!searchOnly&&<ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterRow}>{['', ...courseThemes].map(item => <Pressable accessibilityRole="button" accessibilityState={{ selected: theme === item }} key={item} onPress={() => setTheme(item)} style={[styles.filter, theme === item && styles.filterSelected]}><Text>{item || '전체'}</Text></Pressable>)}</ScrollView>}
-        <Text style={styles.note}>샘플 피드 · {visible.length}개의 코스</Text>
         {!visible.length && <Text style={styles.note}>검색 결과가 없어요. 검색어나 테마를 바꿔보세요.</Text>}
       </View>
-      <Text style={styles.intro}>나와 비슷한 속도로 걷는 사람들의 기록을 발견해보세요.</Text>
       {visible.map((record) => (
         <View key={record.id} style={styles.card}>
           <View style={styles.authorRow}>
@@ -61,7 +59,6 @@ const styles = StyleSheet.create({
   search: { padding: 12, backgroundColor: colors.white, borderRadius: 997, fontSize: 13, color: colors.ink },
   screen: { flex: 1, backgroundColor: 'transparent' },
   content: { paddingBottom: 110 },
-  intro: { color: colors.muted, fontSize: 12, lineHeight: 19, paddingHorizontal: 20, marginBottom: 18 },
   card: { marginHorizontal: 16, marginBottom: 18, borderRadius: radius.large, overflow: 'hidden', backgroundColor: colors.white, shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 8, elevation: 2 },
   authorRow: { padding: 14, flexDirection: 'row', alignItems: 'center' },
   avatar: { width: 38, height: 38, borderRadius: 19, backgroundColor: colors.accent, alignItems: 'center', justifyContent: 'center', marginRight: 10 },
