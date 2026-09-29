@@ -4,11 +4,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CourseMap } from './CourseMap';
 import { GlassSurface } from './GlassSurface';
-import { colors } from '../theme';
+import { colors, gradients } from '../theme';
 import { PLACE_STORAGE_KEY, parseSavedPlaces, searchPlaces, type SavedPlace } from '../placeLibrary';
 import type { OutingPlace, OutingRecord } from '../types';
 
-const BRAND_GRADIENT = ['#2E98E7', '#7ABDF0', '#389C83'] as const;
+const BRAND_GRADIENT = gradients.search;
 
 function GradientButton({ disabled, onPress, children }: { disabled?: boolean; onPress: () => void; children: ReactNode }) {
   return <Pressable accessibilityRole="button" disabled={disabled} onPress={onPress}>

@@ -54,6 +54,12 @@ export const tagPalette = [
 
 export const gradients = {
   hero: [colors.primarySoft, colors.infoSoft] as const,
+  // Vivid gradient sampled from the "BeeNIN" wordmark's B, used for search-bar borders
+  // and primary gradient buttons (PlaceExplorer's search pill, etc.).
+  search: ['#2E98E7', '#7ABDF0', '#389C83'] as const,
+  // Pastel gradient sampled from the beenin-mark.png circles at 70% opacity, used as the
+  // shared button fill across all tabs so every screen's buttons read as one family.
+  button: ['rgba(187,213,252,0.7)', 'rgba(122,189,240,0.7)', 'rgba(179,238,209,0.7)'] as const,
 };
 
 // Dotted-grid app background from the BeeNIN concept board. CSS background-image

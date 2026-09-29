@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Brand } from '../components/Brand';
 import { courseThemes, filterRecords, type SearchMode } from '../recordSearch';
 import { ScreenHeader } from '../components/ScreenHeader';
-import { colors, fonts, radius } from '../theme';
+import { colors, fonts, gradients, radius } from '../theme';
 import type { OutingRecord } from '../types';
 
 type Props = { records: OutingRecord[]; onOpenRecord: (record: OutingRecord) => void; searchOnly?: boolean };
@@ -19,7 +20,9 @@ export function HomeScreen({ records, onOpenRecord, searchOnly=false }: Props) {
       <ScreenHeader eyebrow="DISCOVER" title={searchOnly?'계정과 기록 탐색':'더보기 · 추천 코스'} />
       <View style={styles.filters}>
         {!searchOnly&&<View style={styles.filterRow}>{(['코스', '지역', '테마'] as const).map(item => <Pressable accessibilityRole="button" accessibilityState={{ selected: mode === item }} key={item} onPress={() => setMode(item)} style={[styles.filter, mode === item && styles.filterSelected]}><Text>{item} 검색</Text></Pressable>)}</View>}
-        <TextInput accessibilityLabel={searchOnly?'계정·피드 검색':`${mode} 검색`} placeholder={searchOnly?'계정 이름이나 기록 검색':mode === '지역' ? '지역이나 주소를 검색하세요' : mode === '테마' ? '라이딩, 러닝, 카페공부, 데이트' : '코스 이름이나 장소를 검색하세요'} value={query} onChangeText={setQuery} style={styles.search} />
+        <LinearGradient colors={gradients.search} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.searchBorder}>
+          <TextInput accessibilityLabel={searchOnly?'계정·피드 검색':`${mode} 검색`} placeholder={searchOnly?'계정 이름이나 기록 검색':mode === '지역' ? '지역이나 주소를 검색하세요' : mode === '테마' ? '라이딩, 러닝, 카페공부, 데이트' : '코스 이름이나 장소를 검색하세요'} value={query} onChangeText={setQuery} style={styles.search} />
+        </LinearGradient>
         {!searchOnly&&<ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterRow}>{['', ...courseThemes].map(item => <Pressable accessibilityRole="button" accessibilityState={{ selected: theme === item }} key={item} onPress={() => setTheme(item)} style={[styles.filter, theme === item && styles.filterSelected]}><Text>{item || '전체'}</Text></Pressable>)}</ScrollView>}
         <Text style={styles.note}>샘플 피드 · {visible.length}개의 코스</Text>
         {!visible.length && <Text style={styles.note}>검색 결과가 없어요. 검색어나 테마를 바꿔보세요.</Text>}
@@ -30,7 +33,7 @@ export function HomeScreen({ records, onOpenRecord, searchOnly=false }: Props) {
           <View style={styles.authorRow}>
             <View style={styles.avatar}><Text style={styles.avatarText}>{record.author.slice(0, 1)}</Text></View>
             <View><Text style={styles.author}>{record.author}</Text><Text style={styles.handle}>{record.handle}</Text></View>
-            <Pressable onPress={() => onOpenRecord(record)} style={styles.follow}><Text style={styles.followText}>기록 보기</Text></Pressable>
+            <Pressable onPress={() => onOpenRecord(record)} style={styles.followWrap}><LinearGradient colors={gradients.button} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.follow}><Text style={styles.followText}>기록 보기</Text></LinearGradient></Pressable>
           </View>
           <Pressable onPress={() => onOpenRecord(record)}>
             {record.images.length > 0 && <Image source={record.images[1] ?? record.images[0]} style={styles.image} />}
@@ -40,7 +43,7 @@ export function HomeScreen({ records, onOpenRecord, searchOnly=false }: Props) {
             <Text style={styles.title}>{record.title}</Text>
             <Text style={styles.note}>{record.note}</Text>
             <View style={styles.actions}>
-              <Pressable onPress={() => onOpenRecord(record)} style={styles.save}><Text style={styles.saveText}>코스와 장소 살펴보기 ↗</Text></Pressable>
+              <Pressable onPress={() => onOpenRecord(record)} style={styles.saveWrap}><LinearGradient colors={gradients.button} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.save}><Text style={styles.saveText}>코스와 장소 살펴보기 ↗</Text></LinearGradient></Pressable>
             </View>
           </View>
         </View>
@@ -54,7 +57,8 @@ const styles = StyleSheet.create({
   filterRow: { flexDirection: 'row', gap: 8 },
   filter: { paddingHorizontal: 12, paddingVertical: 12, backgroundColor: colors.white, borderRadius: 12 },
   filterSelected: { backgroundColor: colors.accentSoft },
-  search: { padding: 14, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.white, borderRadius: 12, fontSize: 13, color: colors.ink },
+  searchBorder: { borderRadius: 999, padding: 2 },
+  search: { padding: 12, backgroundColor: colors.white, borderRadius: 997, fontSize: 13, color: colors.ink },
   screen: { flex: 1, backgroundColor: 'transparent' },
   content: { paddingBottom: 110 },
   intro: { color: colors.muted, fontSize: 12, lineHeight: 19, paddingHorizontal: 20, marginBottom: 18 },
@@ -64,14 +68,16 @@ const styles = StyleSheet.create({
   avatarText: { color: colors.white, fontSize: 13, fontWeight: '800', fontFamily: fonts.extrabold },
   author: { color: colors.ink, fontSize: 12, fontWeight: '800', fontFamily: fonts.extrabold },
   handle: { color: colors.muted, fontSize: 9, marginTop: 2 },
-  follow: { marginLeft: 'auto', paddingHorizontal: 11, paddingVertical: 7, borderRadius: 15, backgroundColor: colors.utilitySoft },
-  followText: { color: colors.accent, fontSize: 9, fontWeight: '800', fontFamily: fonts.extrabold },
+  followWrap: { marginLeft: 'auto' },
+  follow: { paddingHorizontal: 11, paddingVertical: 7, borderRadius: 15 },
+  followText: { color: colors.ink, fontSize: 9, fontWeight: '800', fontFamily: fonts.extrabold },
   image: { width: '100%', height: 420, backgroundColor: colors.line },
   copy: { padding: 17 },
   date: { color: colors.accent, fontSize: 9, fontWeight: '800', fontFamily: fonts.extrabold },
   title: { color: colors.ink, fontSize: 18, fontWeight: '800', fontFamily: fonts.extrabold, marginTop: 7 },
   note: { color: colors.muted, fontSize: 12, lineHeight: 18, marginTop: 7 },
   actions: { flexDirection: 'row', gap: 8, marginTop: 15 },
-  save: { flex: 1, paddingHorizontal: 13, paddingVertical: 11, borderRadius: 18, backgroundColor: colors.primary, alignItems: 'center' },
-  saveText: { color: colors.white, fontSize: 10, fontWeight: '800', fontFamily: fonts.extrabold },
+  saveWrap: { flex: 1 },
+  save: { paddingHorizontal: 13, paddingVertical: 11, borderRadius: 18, alignItems: 'center' },
+  saveText: { color: colors.ink, fontSize: 10, fontWeight: '800', fontFamily: fonts.extrabold },
 });
