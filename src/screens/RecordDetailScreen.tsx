@@ -12,7 +12,8 @@ type Props = {
   onOpenMap: () => void;
 };
 
-const colors = { paper: '#FFFFFF', white: '#FFFFFF', ink: '#243D43', muted: '#71848B', line: '#D9E3E9', primary: '#389C83', primarySoft: '#F0F7F4', accent: 'rgba(30,125,95,0.8)' };
+// Aligned with assets/마크그라데이션스와치.png (the mark's pastel blue-green gradient at 70% opacity).
+const colors = { paper: '#FFFFFF', white: '#FFFFFF', ink: '#243D43', muted: '#71848B', line: '#D9E3E9', primary: '#7ABDF0', primarySoft: '#EAF2FE', accent: '#5FA3E0' };
 const radius = { small: 8, medium: 12, large: 12 };
 
 export function RecordDetailScreen({ record, onBack, onOpenMap }: Props) {
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
   selectedPanel: { paddingVertical: 24, borderBottomWidth: 1, borderBottomColor: colors.line, gap: 8 },
   selectedTopline: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   placeNumberLg: { width: 28, height: 28, borderRadius: 14, backgroundColor: colors.accent, alignItems: 'center', justifyContent: 'center' },
-  placeNumberLgText: { color: colors.white, fontSize: 13, fontWeight: '500', fontFamily: fonts.medium },
+  placeNumberLgText: { color: colors.ink, fontSize: 13, fontWeight: '500', fontFamily: fonts.medium },
   selectedRow: { flexDirection: 'row', gap: 14, marginTop: 4 },
   selectedImage: { width: 96, height: 96, borderRadius: radius.medium, backgroundColor: colors.line },
   selectedInfo: { flex: 1, gap: 2 },
@@ -169,13 +170,13 @@ const styles = StyleSheet.create({
   fullMapText: { color: colors.primary, fontSize: 12, fontWeight: '500', fontFamily: fonts.medium },
   placeList: { gap: 10, paddingRight: 20 },
   placeCard: { width: 205, borderRadius: radius.medium, overflow: 'hidden', borderWidth: 2, borderColor: 'transparent', backgroundColor: colors.white },
-  placeCardSelected: { borderColor: colors.accent, backgroundColor: '#E4F3EB' },
+  placeCardSelected: { borderColor: colors.accent, backgroundColor: colors.primarySoft },
   placeImage: { width: '100%', height: 112, backgroundColor: colors.line },
   placeBody: { padding: 12 },
   placeTopline: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   placeNumber: { width: 24, height: 24, borderRadius: 12, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' },
   placeNumberSelected: { backgroundColor: colors.accent },
-  placeNumberText: { color: colors.white, fontSize: 12, fontWeight: '500', fontFamily: fonts.medium },
+  placeNumberText: { color: colors.ink, fontSize: 12, fontWeight: '500', fontFamily: fonts.medium },
   stay: { color: colors.muted, fontSize: 12, fontWeight: '700', fontFamily: fonts.bold },
   placeName: { color: colors.ink, fontSize: 18, fontWeight: '500', fontFamily: fonts.medium, marginTop: 9 },
   address: { color: colors.muted, fontSize: 12, marginTop: 3 },
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
   orderItem: { minWidth: 0, flex: 1, flexDirection: 'row', alignItems: 'center' },
   orderDot: { width: 20, height: 20, borderRadius: 10, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center', marginRight: 5 },
   orderDotSelected: { backgroundColor: colors.accent },
-  orderNumber: { color: colors.white, fontSize: 12, fontWeight: '500', fontFamily: fonts.medium },
+  orderNumber: { color: colors.ink, fontSize: 12, fontWeight: '500', fontFamily: fonts.medium },
   orderName: { flex: 1, color: colors.ink, fontSize: 12, fontWeight: '500', fontFamily: fonts.medium },
   orderArrow: { color: colors.accent, fontSize: 14, marginHorizontal: 4 },
   divider: { height: 1, backgroundColor: colors.line, marginVertical: 28 },
@@ -197,5 +198,5 @@ const styles = StyleSheet.create({
   diaryImage: { width: 150, height: 150, borderRadius: radius.medium, backgroundColor: colors.line },
   primaryButton: { marginTop: 25, paddingVertical: 15, borderRadius: radius.medium, backgroundColor: colors.primary, alignItems: 'center' },
   importButton: { backgroundColor: colors.accent },
-  primaryButtonText: { color: colors.white, fontSize: 13, fontWeight: '500', fontFamily: fonts.medium },
+  primaryButtonText: { color: colors.ink, fontSize: 13, fontWeight: '500', fontFamily: fonts.medium },
 });
