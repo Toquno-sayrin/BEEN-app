@@ -31,6 +31,11 @@ jobs:
 
       - run: npm ci
 
+      - name: Validate TypeScript and layout settings
+        run: |
+          npx tsc --noEmit
+          node --test tests/layoutModel.test.cjs tests/worldModel.test.cjs
+
       - name: Export web build
         run: CI=1 npx expo export --platform web --output-dir dist
 

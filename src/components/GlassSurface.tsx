@@ -4,6 +4,7 @@ import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { glass } from '../theme';
 
 type Props = {
+  testID?: string;
   level?: 1 | 2 | 3;
   /** Corner radius shared by the shadow host and the clipped blur layer. */
   radius?: number;
@@ -16,10 +17,10 @@ type Props = {
   children: ReactNode;
 };
 
-export function GlassSurface({ level = 2, radius = 16, style, contentStyle, fill = false, children }: Props) {
+export function GlassSurface({ testID, level = 2, radius = 16, style, contentStyle, fill = false, children }: Props) {
   const g = glass[level];
   return (
-    <View style={[g.shadow, { borderRadius: radius }, style]}>
+    <View testID={testID} style={[g.shadow, { borderRadius: radius }, style]}>
       <View style={[styles.clip, fill && StyleSheet.absoluteFill, { borderRadius: radius }]}>
         <BlurView intensity={g.blurIntensity} tint="light" style={StyleSheet.absoluteFill} />
         <View style={[StyleSheet.absoluteFill, styles.tintLayer, { backgroundColor: g.tint, borderColor: g.border }]} />

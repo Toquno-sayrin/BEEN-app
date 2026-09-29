@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>BEEN · 화면 편집기</title>
+  <link rel="stylesheet" href="./editor.css">
+  <script src="./model.js" defer></script><script src="./editor.js" defer></script>
+</head>
+<body>
+  <header class="toolbar">
+    <div class="identity"><span class="monogram">B</span><div><strong>BEEN <span>화면 편집기</span></strong><small id="save-state">원본 화면</small></div></div>
+    <div class="tool-group"><button id="undo" title="Ctrl / ⌘ Z" disabled>↶ 실행 취소</button><button id="redo" title="Ctrl / ⌘ Shift Z" disabled>↷ 다시 실행</button></div>
+    <div class="toolbar-end"><button id="preview" aria-pressed="false">미리보기</button><button id="export">내보내기</button><button id="save" class="primary">브라우저에 저장</button><a href="../" target="_blank" rel="noopener">사이트 열기 ↗</a></div>
+  </header>
+  <main class="workspace">
+    <aside class="layers panel" aria-label="요소 목록">
+      <div class="panel-heading"><h1>요소</h1><span id="layer-count" class="muted"></span></div>
+      <p class="hint">화면에서 선택하거나 목록을 누르세요. Shift를 누르면 여러 요소를 선택합니다.</p>
+      <div id="layer-list"></div>
+      <section><h2>새 요소 추가</h2><div class="add-grid"><button data-add="text">T &nbsp; 텍스트</button><button data-add="button">▣ &nbsp; 버튼</button><button id="add-image">▧ &nbsp; 이미지</button><button data-add="box">□ &nbsp; 도형</button></div></section>
+      <section><h2>설정 파일</h2><button id="import" class="wide">JSON 불러오기</button><button id="reset" class="wide subtle">전체 기본값으로 되돌리기</button><p class="hint">저장한 설정은 이 브라우저의 메인 화면에 적용됩니다. 공개 배포용으로는 JSON을 내보내 주세요.</p></section>
+    </aside>
+    <section class="stage" aria-label="편집 캔버스">
+      <div class="canvas-toolbar"><button id="toggle-layers" aria-expanded="false">요소 목록</button><span class="canvas-title">MAIN SCREEN</span><label>화면 <select id="viewport"><option value="390,844">모바일 · 390 × 844</option><option value="480,900" selected>기본 · 480 × 900</option><option value="768,1024">태블릿 · 768 × 1024</option></select></label><label><input type="checkbox" id="snap"> 8px 격자 맞춤</label></div>
+      <div class="canvas-scroll" id="canvas-scroll"><div id="frame-wrap"><iframe id="app-frame" title="BEEN 실제 화면 편집 캔버스" src="../?layout-editor=1"></iframe></div></div>
+      <div class="canvas-footer"><span id="mode-hint">드래그로 이동 · 모서리로 크기 조절</span><div><button id="zoom-out" aria-label="축소">−</button><output id="zoom-label">100%</output><button id="zoom-in" aria-label="확대">+</button><button id="fit">화면에 맞춤</button></div></div>
+    </section>
+    <aside class="inspector panel" aria-label="선택한 요소 속성">
+      <div class="panel-heading"><h2>속성</h2><span class="badge">LIVE</span></div>
+      <div id="empty-selection"><div class="selection-symbol">↖</div><h3>어디든 옮겨보세요</h3><p class="hint">로고, 버튼, 지도, 메뉴를 선택하면 위치와 크기를 직접 조절할 수 있어요.</p></div>
+      <div id="properties" hidden>
+        <h3 id="selection-name"></h3><p id="selection-help" class="hint"></p>
+        <fieldset id="geometry-fields"><legend>위치와 크기 <span class="muted">px</span></legend><div class="field-grid">
+          <label>X <input id="prop-x" type="number" step="1" min="-4000" max="4000"></label><label>Y <input id="prop-y" type="number" step="1" min="-4000" max="4000"></label>
+          <label>너비 <input id="prop-width" type="number" step="1" min="8" max="4000"></label><label>높이 <input id="prop-height" type="number" step="1" min="8" max="4000"></label>
+        </div></fieldset>
+        <fieldset id="align-fields"><legend>정렬</legend><div class="align-grid"><button data-align="left">왼쪽</button><button data-align="center">가로 중앙</button><button data-align="right">오른쪽</button><button data-align="top">위쪽</button><button data-align="middle">세로 중앙</button><button data-align="bottom">아래쪽</button></div><p class="hint">하나 선택: 화면 기준 · 여러 개 선택: 선택 영역 기준</p></fieldset>
+        <div id="custom-fields" hidden>
+          <label class="stack">이름 <input id="prop-name" maxlength="100"></label>
+          <label class="stack">내용 / 이미지 설명 <textarea id="prop-text" rows="3" maxlength="2000"></textarea></label>
+          <label class="stack" id="href-field" hidden>버튼 링크 <input id="prop-href" type="url" placeholder="https://..."></label>
+          <p id="button-note" class="hint" hidden>추가 버튼은 링크를 지정하면 새 탭에서 열립니다.</p>
+          <div class="field-grid"><label>글자 크기 <input id="prop-fontSize" type="number" min="8" max="160"></label><label>모서리 <input id="prop-radius" type="number" min="0" max="500"></label><label>글자색 <input id="prop-color" type="color"></label><label>배경색 <input id="prop-background" type="color"></label></div>
+        </div>
+        <section><h2>겹침 순서</h2><div class="button-row"><button id="backward">뒤로</button><button id="forward">앞으로</button></div><p class="hint">기본 메뉴 항목의 겹침 순서는 메뉴 안에서 적용됩니다.</p></section>
+        <section class="actions"><button id="lock" class="wide">위치 잠금</button><button id="duplicate" class="wide">추가 요소 복제</button><button id="restore" class="wide">선택 요소 기본값</button><button id="delete" class="wide danger">선택 요소 삭제</button><p class="hint">삭제한 요소는 목록의 ‘복원’으로 되살릴 수 있어요.</p></section>
+      </div>
+      <section class="shortcuts"><h2>단축키</h2><p>방향키 <span>1px 이동</span></p><p>Shift + 방향키 <span>10px 이동</span></p><p>Delete <span>선택 요소 삭제</span></p><p>Ctrl / ⌘ + S <span>저장</span></p><p>Esc <span>선택 해제</span></p></section>
+    </aside>
+  </main>
+  <div class="statusbar"><span id="status" role="status" aria-live="polite">실제 사이트를 불러오는 중…</span><span>메인 화면 편집 · 지도 안의 장소는 앱에서 관리</span></div>
+  <input type="file" id="import-file" accept="application/json,.json" hidden><input type="file" id="image-file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+</body>
+</html>

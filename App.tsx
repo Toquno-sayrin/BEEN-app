@@ -11,6 +11,7 @@ import {
 import { useState } from 'react';
 import { Platform, Pressable, Text, SafeAreaView, StatusBar, StyleSheet, View } from 'react-native';
 import { BottomNav } from './src/components/BottomNav';
+import { LayoutRuntime } from './src/components/LayoutRuntime';
 import { discoveryRecords, sampleRecord } from './src/data/sampleRecords';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
@@ -73,7 +74,8 @@ export default function App() {
   return (
     <SafeAreaView style={styles.appShell}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.paper} />
-      <View style={[styles.phone, view.kind !== 'detail' && dotGrid, Platform.OS === 'web' && view.kind === 'detail' && { maxWidth: '100%' }]}>
+      <LayoutRuntime />
+      <View testID={view.kind === 'tab' && ['map', 'create'].includes(view.tab) ? 'layout-root' : undefined} style={[styles.phone, view.kind !== 'detail' && dotGrid, Platform.OS === 'web' && view.kind === 'detail' && { maxWidth: '100%' }]}>
         <View style={styles.content}>
           {view.kind==='tab' && !['map','create'].includes(view.tab) && <Pressable accessibilityRole="button" onPress={()=>changeTab('map')} style={{padding:14}}><Text style={{color:colors.brand}}>← 내 세계</Text></Pressable>}
           {view.kind === 'detail' ? (

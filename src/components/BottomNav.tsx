@@ -18,11 +18,12 @@ type Props = {
 export function BottomNav({ active, onChange }: Props) {
   return (
     <View style={styles.dock}>
-      <GlassSurface fill level={3} radius={30} style={styles.pill} contentStyle={styles.pillContent}>
+      <GlassSurface testID="layout-nav" fill level={3} radius={30} style={styles.pill} contentStyle={styles.pillContent}>
         {items.map((item) => {
           const selected = active === item.key;
           return (
             <Pressable
+              testID={`layout-nav-${item.key}`}
               accessibilityRole="button"
               accessibilityLabel={item.label}
               accessibilityState={{ selected }}
