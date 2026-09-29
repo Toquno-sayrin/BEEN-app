@@ -11,6 +11,8 @@ export const colors = {
   primarySoft: '#F0F7F4',
   accent: 'rgba(42, 164, 132, 0.8)',
   accentSoft: '#D7EFE5',
+  // Utility-button soft background, sampled from assets/스와치컬러.png; pairs with `accent` as the solid/text color.
+  utilitySoft: '#A0DDD6',
   info: 'rgba(124, 172, 67, 0.8)',
   infoSoft: '#EDF5DC',
   brand: '#389C83',
